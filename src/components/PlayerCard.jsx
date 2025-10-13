@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import TeamLogo from "./TeamLogo"; // Ajoute cette ligne
 
 export default function PlayerCard({ player }) {
   // calculer les moyennes sur les matchs
@@ -37,14 +38,17 @@ export default function PlayerCard({ player }) {
         className="w-32 h-32 object-cover rounded-full border-4 border-white shadow-md mb-4"
       />
 
-      {/* Nom & équipe */}
+      {/* Nom & équipe avec logo */}
       <h2 className="text-2xl font-bold text-center">{player.name}</h2>
-      <p className="text-center text-white/70">{player.team}</p>
+      <div className="flex items-center justify-center gap-2 mt-2">
+        <TeamLogo teamName={player.team} />
+        <p className="text-center text-white/70">{player.team}</p>
+      </div>
       <p className="text-sm text-white/60 italic mb-4">
         {player.info.position}
       </p>
 
-      {/* Infos physiques */}
+      {/* Le reste du code reste identique */}
       <div className="flex justify-center gap-6 text-sm mb-6">
         <div className="text-center">
           <p className="font-bold">{player.info.age}</p>
@@ -60,7 +64,6 @@ export default function PlayerCard({ player }) {
         </div>
       </div>
 
-      {/* Stats moyennes */}
       <div className="grid grid-cols-3 gap-4 text-center text-sm w-full">
         <div>
           <p className="font-bold">{avg("PTS")}</p>

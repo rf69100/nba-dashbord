@@ -13,12 +13,9 @@ export default function Home() {
     >
       {/* Logo NBA animé */}
       <motion.img
-        src="/images/nba-logos/nba-logo.svg"
+        src={`${process.env.PUBLIC_URL}/images/nba-logos/nba-logo.svg`}
         alt="NBA Logo"
         className="mx-auto w-32 sm:w-40 mb-6"
-        initial={{ rotate: -360, scale: 0 }}
-        animate={{ rotate: 0, scale: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
       />
 
       <motion.h1
