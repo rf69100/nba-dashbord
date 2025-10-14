@@ -13,6 +13,7 @@ const TeamRankingTable = ({ teams }) => {
           <span className="col-span-5">Équipe</span>
           <span className="col-span-2 text-center">Victoires</span>
           <span className="col-span-2 text-center">Défaites</span>
+          <span className="col-span-2 text-center">%</span>
         </div>
 
         {/* Lignes */}
@@ -20,8 +21,9 @@ const TeamRankingTable = ({ teams }) => {
           <motion.div
             key={team.name}
             whileHover={{ scale: 1.01 }}
-            className={`grid grid-cols-12 gap-4 p-4 items-center transition-colors rounded-b-xl cursor-pointer
-              ${index % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
+            className={`grid grid-cols-12 gap-4 p-4 items-center transition-colors rounded-b-xl cursor-pointer ${
+              index % 2 === 0 ? "bg-white" : "bg-gray-50"
+            }`}
           >
             {/* Rang */}
             <span className="col-span-1 text-center font-semibold text-lg">{team.rank}</span>
@@ -37,6 +39,9 @@ const TeamRankingTable = ({ teams }) => {
 
             {/* Défaites */}
             <span className="col-span-2 text-center font-semibold text-red-600">{team.losses}</span>
+
+            {/* Pourcentage */}
+            <span className="col-span-2 text-center font-semibold text-blue-600">{team.percentage}%</span>
           </motion.div>
         ))}
       </div>

@@ -10,7 +10,11 @@ const Teams = () => {
   const filteredTeams = allTeams
     .filter(team => conference === "All" || team.conference === conference)
     .sort((a, b) => b.wins - a.wins)
-    .map((team, index) => ({ ...team, rank: index + 1 }));
+    .map((team, index) => ({ 
+      ...team, 
+      rank: index + 1,
+      percentage: ((team.wins / (team.wins + team.losses)) * 100).toFixed(1)
+    }));
 
   return (
     <div className="pt-24 px-4 sm:px-5 min-h-screen bg-gradient-to-b from-red-600 via-orange-400 to-yellow-300 text-white flex flex-col items-center">
@@ -55,7 +59,7 @@ const Teams = () => {
         <div className="block sm:hidden">
           {filteredTeams.map((team, index) => (
             <motion.div
-              key={team.id}
+              key={team.name}
               whileHover={{ scale: 1.02 }}
               className={`mb-3 p-4 rounded-xl border border-gray-200 cursor-pointer transition-colors ${
                 index % 2 === 0 ? "bg-white" : "bg-gray-50"
@@ -65,9 +69,12 @@ const Teams = () => {
                 <div className="flex items-center space-x-3">
                   <span className="text-lg font-bold text-gray-700">#{team.rank}</span>
                   <img 
-                    src={team.logo} 
+                    src={`${process.env.PUBLIC_URL}/images/nba-logos/${team.name.toLowerCase().replace(/\s+/g, "-")}.svg`}
                     alt={team.name} 
                     className="w-10 h-10 object-contain"
+                    onError={(e) => { 
+                      e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`; 
+                    }}
                   />
                   <span className="font-bold text-gray-900 text-sm">{team.name}</span>
                 </div>
