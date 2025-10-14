@@ -4,6 +4,21 @@ import { useNavigate } from "react-router-dom";
 export default function Home() {
   const navigate = useNavigate();
 
+  const features = [
+    {
+      title: "📊 Comparer les joueurs",
+      desc: "Sélectionne tes joueurs préférés et compare leurs performances sur les 10 derniers matchs grâce à nos graphiques interactifs.",
+      color: "bg-red-500 hover:bg-red-600",
+      path: "/player"
+    },
+    {
+      title: "🏀 Classement des équipes",
+      desc: "Consulte le classement complet des équipes NBA et découvre les statistiques clés de chaque franchise.",
+      color: "bg-orange-500 hover:bg-orange-600",
+      path: "/teams"
+    },
+  ];
+
   return (
     <motion.div
       className="pt-20 px-5 text-center min-h-screen bg-gradient-to-b from-red-600 via-orange-400 to-yellow-300 text-white flex flex-col items-center justify-center"
@@ -36,56 +51,24 @@ export default function Home() {
         Explore les statistiques des joueurs, compare leurs performances, et découvre le classement complet des équipes NBA saison 2025-2026.
       </motion.p>
 
-      {/* Fonctionnalités avec animations et style NBA */}
-      <div className="grid md:grid-cols-3 gap-6 mb-10 w-full max-w-5xl">
-        {[
-          {
-            title: "📊 Comparer les joueurs",
-            desc: "Sélectionne tes joueurs préférés et compare leurs performances sur les 10 derniers matchs grâce à nos graphiques interactifs.",
-            color: "bg-red-500 hover:bg-red-600",
-          },
-          {
-            title: "🏀 Classement des équipes",
-            desc: "Consulte le classement complet des équipes NBA et découvre les statistiques clés de chaque franchise.",
-            color: "bg-orange-500 hover:bg-orange-600",
-          },
-          {
-            title: "🎯 Statistiques en temps réel",
-            desc: "Suis l’évolution des scores et des performances de tes joueurs favoris en direct pendant les matchs.",
-            color: "bg-yellow-500 hover:bg-yellow-600",
-          },
-        ].map((item) => (
+      {/* Fonctionnalités centrées avec animations qui servent de boutons de navigation */}
+      <div className="flex flex-col md:flex-row justify-center items-center gap-6 mb-10 w-full max-w-4xl">
+        {features.map((item) => (
           <motion.div
             key={item.title}
-            className={`${item.color} p-6 rounded-3xl shadow-xl cursor-pointer text-gray-900`}
-            whileHover={{ scale: 1.05, rotate: 1 }}
+            className={`${item.color} p-6 rounded-3xl shadow-xl cursor-pointer text-gray-900 transition-colors duration-300 w-full md:w-96`}
+            whileHover={{ 
+              scale: 1.05, 
+              rotate: 1,
+              transition: { type: "spring", stiffness: 300 }
+            }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => navigate(item.path)}
           >
             <h2 className="text-xl font-bold mb-2">{item.title}</h2>
             <p className="text-sm md:text-base">{item.desc}</p>
           </motion.div>
         ))}
-      </div>
-
-      {/* Boutons principaux */}
-      <div className="flex flex-wrap justify-center gap-6 mb-10">
-        <motion.button
-          className="px-6 py-3 rounded-2xl bg-black text-yellow-400 font-bold shadow-lg hover:bg-gray-900"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => navigate("/player")}
-        >
-          Comparer les joueurs
-        </motion.button>
-
-        <motion.button
-          className="px-6 py-3 rounded-2xl bg-black text-red-400 font-bold shadow-lg hover:bg-gray-900"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => navigate("/teams")}
-        >
-          Voir le classement
-        </motion.button>
       </div>
 
       {/* Footer NBA */}
@@ -95,7 +78,7 @@ export default function Home() {
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 1 }}
       >
-        Données mises à jour pour la saison NBA 2025-2026. Statistiques et scores en temps réel pour vivre l’expérience du vrai terrain !
+        Données mises à jour pour la saison NBA 2025-2026. Statistiques et scores en temps réel pour vivre l'expérience du vrai terrain !
       </motion.p>
     </motion.div>
   );
