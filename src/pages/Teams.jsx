@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import TeamRankingTable from "../components/TeamRankingTable";
-import { teams as allTeams } from "../services/nbaData";
+// Importation des modules nécessaires
+import React, { useState } from "react"; // React et hook d'état
+import { motion } from "framer-motion"; // Pour les animations
+import TeamRankingTable from "../components/TeamRankingTable"; // Tableau de classement
+import { teams as allTeams } from "../services/nbaData"; // Données des équipes
 
 const Teams = () => {
   const [conference, setConference] = useState("All");
@@ -65,22 +66,21 @@ const Teams = () => {
                 index % 2 === 0 ? "bg-white" : "bg-gray-50"
               }`}
             >
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center space-x-3">
-                  <span className="text-lg font-bold text-gray-700">#{team.rank}</span>
-                  <img 
-                    src={`${process.env.PUBLIC_URL}/images/nba-logos/${team.name.toLowerCase().replace(/\s+/g, "-")}.svg`}
-                    alt={team.name} 
-                    className="w-10 h-10 object-contain"
-                    onError={(e) => { 
-                      e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`; 
-                    }}
-                  />
-                  <span className="font-bold text-gray-900 text-sm">{team.name}</span>
-                </div>
+              {/* Informations principales de l'équipe */}
+              <div className="flex items-center space-x-3">
+                <span className="text-lg font-bold text-gray-700">#{team.rank}</span>
+                <img 
+                  src={`${process.env.PUBLIC_URL}/images/nba-logos/${team.name.toLowerCase().replace(/\s+/g, "-")}.svg`}
+                  alt={team.name} 
+                  className="w-10 h-10 object-contain"
+                  onError={(e) => { 
+                    e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`; 
+                  }}
+                />
+                <span className="font-bold text-gray-900 text-sm">{team.name}</span>
               </div>
-              
-              <div className="flex justify-between items-center">
+              {/* Statistiques de l'équipe */}
+              <div className="flex justify-between items-center mt-2">
                 <div className="text-center">
                   <div className="text-xs text-gray-600">Victoires</div>
                   <div className="font-semibold text-green-600">{team.wins}</div>

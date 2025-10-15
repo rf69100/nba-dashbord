@@ -1,12 +1,23 @@
 import { motion } from "framer-motion";
-import TeamLogo from "./TeamLogo"; // Ajoute cette ligne
+import TeamLogo from "./TeamLogo";
 
+/**
+ * Carte d'affichage des informations et statistiques moyennes d'un joueur NBA.
+ * @param {Object} player - Données du joueur à afficher
+ */
 export default function PlayerCard({ player }) {
-  // calculer les moyennes sur les matchs
+  // Nombre de matchs pris en compte
   const games = player.lastGames.length;
+
+  /**
+   * Calcule la moyenne d'une statistique sur les derniers matchs
+   * @param {string} stat - Clé de la statistique (ex: "PTS")
+   * @returns {string} Moyenne arrondie à 1 décimale
+   */
   const avg = (stat) =>
     (player.lastGames.reduce((sum, g) => sum + g[stat], 0) / games).toFixed(1);
 
+  // Pourcentages de réussite
   const fgPct = (
     (player.lastGames.reduce((sum, g) => sum + g.FG, 0) /
       player.lastGames.reduce((sum, g) => sum + g.FGA, 0)) *
@@ -25,6 +36,7 @@ export default function PlayerCard({ player }) {
     100
   ).toFixed(1);
 
+  // Rendu de la carte joueur
   return (
     <motion.div
       className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg text-white w-full md:w-80 flex flex-col items-center"
@@ -48,7 +60,7 @@ export default function PlayerCard({ player }) {
         {player.info.position}
       </p>
 
-      {/* Le reste du code reste identique */}
+      {/* Informations physiques */}
       <div className="flex justify-center gap-6 text-sm mb-6">
         <div className="text-center">
           <p className="font-bold">{player.info.age}</p>
@@ -64,6 +76,7 @@ export default function PlayerCard({ player }) {
         </div>
       </div>
 
+      {/* Statistiques moyennes */}
       <div className="grid grid-cols-3 gap-4 text-center text-sm w-full">
         <div>
           <p className="font-bold">{avg("PTS")}</p>

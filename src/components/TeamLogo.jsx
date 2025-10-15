@@ -1,5 +1,10 @@
 import React from "react";
 
+/**
+ * Composant d'affichage du logo d'une équipe NBA.
+ * Transforme le nom d'équipe en nom de fichier SVG et gère l'erreur si le logo n'existe pas.
+ * @param {string} teamName - Nom de l'équipe
+ */
 const TeamLogo = ({ teamName }) => {
   // Transforme le nom de l'équipe en format minuscule avec tirets
   const fileName = teamName.toLowerCase().replace(/\s+/g, "-");

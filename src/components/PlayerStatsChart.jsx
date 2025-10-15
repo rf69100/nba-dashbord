@@ -1,19 +1,35 @@
-import { useState } from "react";
+// Importation des hooks et composants nécessaires
+import { useState } from "react"; // Hook React pour gérer l'état local
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
-} from "recharts";
-import { motion } from "framer-motion";
-import PlayerCard from "./PlayerCard";
+} from "recharts"; // Librairie pour les graphiques
+import { motion } from "framer-motion"; // Pour les animations
+import PlayerCard from "./PlayerCard"; // Carte individuelle du joueur
 
+/**
+ * Composant d'affichage et de comparaison des statistiques des joueurs sélectionnés.
+ * Affiche : recherche, sélection, tableau des matchs, graphiques points et stats secondaires.
+ * @param {Array} selectedPlayers - Joueurs sélectionnés
+ * @param {Function} togglePlayer - Fonction pour ajouter/retirer un joueur
+ * @param {Array} allPlayers - Liste complète des joueurs
+ */
 export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPlayers }) {
+  // État local pour la barre de recherche
   const [search, setSearch] = useState("");
 
+  // Filtre les joueurs selon la recherche
   const filteredPlayers = allPlayers.filter((p) =>
-  p.name.toLowerCase().startsWith(search.toLowerCase())
+    p.name.toLowerCase().startsWith(search.toLowerCase())
   );
 
+  // Nombre de matchs affichés
   const maxGames = 10;
 
+  /**
+   * Prépare les données pour les graphiques selon la statistique demandée.
+   * @param {string} statKey - Clé de la statistique (ex: "PTS")
+   * @returns {Array} Données formatées pour le graphique
+   */
   const prepareChartData = (statKey) => {
     const data = [];
     for (let i = 0; i < maxGames; i++) {
@@ -26,12 +42,15 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
     return data;
   };
 
-  const COLORS = ["#002affff", "#25ca00ff"]; // max 2 joueurs
+  // Couleurs pour les courbes (max 2 joueurs)
+  const COLORS = ["#002affff", "#25ca00ff"];
+  // Statistiques secondaires à afficher en mini-graphique
   const miniStats = ["REB", "AST", "STL", "BLK"];
 
+  // Rendu principal du composant
   return (
     <div className="bg-white/30 backdrop-blur-md p-6 rounded-2xl shadow-lg w-full text-gray-900">
-      {/* Joueurs sélectionnés */}
+      {/* Affichage des joueurs sélectionnés avec bouton de retrait */}
       {selectedPlayers.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-4">
           {selectedPlayers.map((p) => (
@@ -53,7 +72,7 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
         </div>
       )}
 
-      {/* Barre de recherche */}
+      {/* Barre de recherche pour filtrer les joueurs */}
       <input
         type="text"
         placeholder="Rechercher un joueur..."
@@ -62,7 +81,7 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
         className="w-full mb-6 px-4 py-2 border rounded-lg text-gray-900"
       />
 
-      {/* Résultats filtrés */}
+      {/* Affichage des résultats filtrés pour sélection rapide */}
       {search && filteredPlayers.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-6 max-h-40 overflow-y-auto">
           {filteredPlayers.map((p) => (
@@ -77,7 +96,7 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
         </div>
       )}
 
-      {/* Cartes joueurs */}
+      {/* Cartes individuelles des joueurs sélectionnés */}
       {selectedPlayers.length > 0 && (
         <div className="flex flex-wrap justify-center gap-6 mb-10">
           {selectedPlayers.map((p) => (
@@ -86,7 +105,7 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
         </div>
       )}
 
-      {/* Tableau des derniers matchs - avant les charts */}
+      {/* Tableau des derniers matchs pour chaque joueur sélectionné */}
       {selectedPlayers.length > 0 && selectedPlayers.map((p) => (
         <div key={p.id} className="mb-10 overflow-x-auto">
           <h3 className="text-xl font-bold text-white mb-3 text-center drop-shadow-lg">
@@ -125,7 +144,7 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
         </div>
       ))}
 
-      {/* Graphique principal - Points */}
+      {/* Graphique principal : points par match */}
       {selectedPlayers.length > 0 && (
         <div className="mb-8">
           <h3 className="text-xl font-bold text-white mb-4 text-center drop-shadow-lg">
@@ -154,7 +173,7 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
         </div>
       )}
 
-      {/* Mini-graphs REB, AST, STL, BLK - sans fond coloré */}
+      {/* Mini-graphes pour stats secondaires : REB, AST, STL, BLK */}
       {selectedPlayers.length > 0 && miniStats.map((stat) => (
         <div key={stat} className="mb-6 p-4 rounded-xl bg-white/10">
           <h4 className="text-lg font-semibold text-white mb-2 drop-shadow-md text-center">
