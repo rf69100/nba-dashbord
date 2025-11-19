@@ -1,21 +1,89 @@
 // Importation des modules nécessaires
-import React, { useState } from "react"; // React et hook d'état
+import React, { useState, useEffect } from "react"; // React et hooks d'état et d'effet
 import { motion } from "framer-motion"; // Pour les animations
 import TeamRankingTable from "../components/TeamRankingTable"; // Tableau de classement
-import { teams as allTeams } from "../services/nbaData"; // Données des équipes
+import { getStandings } from "../services/nbaApi"; // Service API pour récupérer les standings
 
 const Teams = () => {
+  // États pour gérer la conférence sélectionnée, les données, le chargement et les erreurs
   const [conference, setConference] = useState("All");
+  const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Filtrage par conférence et tri par wins descendant + rang automatique
-  const filteredTeams = allTeams
-    .filter(team => conference === "All" || team.conference === conference)
-    .sort((a, b) => b.wins - a.wins)
-    .map((team, index) => ({ 
-      ...team, 
-      rank: index + 1,
-      percentage: ((team.wins / (team.wins + team.losses)) * 100).toFixed(1)
-    }));
+  // Charger les données depuis l'API au montage du composant et quand la conférence change
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Appel à l'API avec filtre de conférence (si différent de "All")
+        const filters = conference === "All" ? {} : { conference };
+        const data = await getStandings(filters);
+
+        // L'API retourne déjà les données triées par wins (DESC)
+        // On ajoute juste le rang
+        const teamsWithRank = data.map((team, index) => ({
+          ...team,
+          rank: index + 1,
+          percentage: team.win_percentage // L'API calcule déjà le pourcentage
+        }));
+
+        setTeams(teamsWithRank);
+      } catch (err) {
+        console.error('Erreur lors du chargement des équipes:', err);
+        setError(err.message || 'Impossible de charger les données');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeams();
+  }, [conference]); // Recharger quand la conférence change
+
+  // Affichage pendant le chargement
+  if (loading) {
+    return (
+      <div className="pt-24 px-4 sm:px-5 min-h-screen bg-gradient-to-b from-red-600 via-orange-400 to-yellow-300 text-white flex flex-col items-center justify-center">
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-xl font-semibold">Chargement des équipes...</p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Affichage en cas d'erreur
+  if (error) {
+    return (
+      <div className="pt-24 px-4 sm:px-5 min-h-screen bg-gradient-to-b from-red-600 via-orange-400 to-yellow-300 text-white flex flex-col items-center justify-center">
+        <motion.div
+          className="bg-white text-red-600 p-6 rounded-xl shadow-2xl max-w-md"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2 className="text-2xl font-bold mb-3">Erreur</h2>
+          <p className="mb-4">{error}</p>
+          <p className="text-sm text-gray-600">Assurez-vous que l'API est lancée sur http://localhost:3001</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            Réessayer
+          </button>
+        </motion.div>
+      </div>
+    );
+  }
+
+  const filteredTeams = teams;
 
   return (
     <div className="pt-24 px-4 sm:px-5 min-h-screen bg-gradient-to-b from-red-600 via-orange-400 to-yellow-300 text-white flex flex-col items-center">
@@ -69,12 +137,12 @@ const Teams = () => {
               {/* Informations principales de l'équipe */}
               <div className="flex items-center space-x-3">
                 <span className="text-lg font-bold text-gray-700">#{team.rank}</span>
-                <img 
-                  src={`${process.env.PUBLIC_URL}/images/nba-logos/${team.name.toLowerCase().replace(/\s+/g, "-")}.svg`}
-                  alt={team.name} 
+                <img
+                  src={`${process.env.PUBLIC_URL}${team.logo_url}`}
+                  alt={team.name}
                   className="w-10 h-10 object-contain"
-                  onError={(e) => { 
-                    e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`; 
+                  onError={(e) => {
+                    e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`;
                   }}
                 />
                 <span className="font-bold text-gray-900 text-sm">{team.name}</span>

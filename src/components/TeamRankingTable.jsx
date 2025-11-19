@@ -1,7 +1,6 @@
 // Importation des modules nécessaires
 import React from "react"; // React
 import { motion } from "framer-motion"; // Pour les animations
-import TeamLogo from "./TeamLogo"; // Composant logo équipe
 
 /**
  * Tableau de classement des équipes NBA.
@@ -24,7 +23,7 @@ const TeamRankingTable = ({ teams }) => {
         {/* Lignes du tableau pour chaque équipe */}
         {teams.map((team, index) => (
           <motion.div
-            key={team.name}
+            key={team.id}
             whileHover={{ scale: 1.01 }}
             className={`grid grid-cols-12 gap-4 p-4 items-center transition-colors rounded-b-xl cursor-pointer ${
               index % 2 === 0 ? "bg-white" : "bg-gray-50"
@@ -35,7 +34,14 @@ const TeamRankingTable = ({ teams }) => {
 
             {/* Équipe avec logo */}
             <div className="col-span-5 flex items-center gap-3">
-              <TeamLogo teamName={team.name} />
+              <img
+                src={`${process.env.PUBLIC_URL}${team.logo_url}`}
+                alt={team.name}
+                className="w-12 h-12 object-contain"
+                onError={(e) => {
+                  e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`;
+                }}
+              />
               <span className="font-medium text-gray-900">{team.name}</span>
             </div>
 

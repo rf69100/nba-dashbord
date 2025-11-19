@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import TeamLogo from "./TeamLogo";
 
 /**
  * Carte d'affichage des informations et statistiques moyennes d'un joueur NBA.
@@ -8,6 +7,19 @@ import TeamLogo from "./TeamLogo";
 export default function PlayerCard({ player }) {
   // Nombre de matchs pris en compte
   const games = player.lastGames.length;
+
+  // Protection si aucun match n'est disponible
+  if (games === 0) {
+    return (
+      <motion.div
+        className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg text-white w-full md:w-80 flex flex-col items-center"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <p className="text-center">Aucune statistique disponible</p>
+      </motion.div>
+    );
+  }
 
   /**
    * Calcule la moyenne d'une statistique sur les derniers matchs
@@ -50,12 +62,9 @@ export default function PlayerCard({ player }) {
         className="w-32 h-32 object-cover rounded-full border-4 border-white shadow-md mb-4"
       />
 
-      {/* Nom & équipe avec logo */}
+      {/* Nom & équipe */}
       <h2 className="text-2xl font-bold text-center">{player.name}</h2>
-      <div className="flex items-center justify-center gap-2 mt-2">
-        <TeamLogo teamName={player.team} />
-        <p className="text-center text-white/70">{player.team}</p>
-      </div>
+      <p className="text-center text-white/70 mt-2">{player.team}</p>
       <p className="text-sm text-white/60 italic mb-4">
         {player.info.position}
       </p>
