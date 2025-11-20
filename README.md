@@ -1,6 +1,60 @@
-# Getting Started with Create React App
+# NBA Dashboard - balldontlie API
+
+Application React pour visualiser les statistiques NBA en utilisant l'API [balldontlie](https://www.balldontlie.io/).
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## 🏀 Fonctionnalités
+
+- **Comparaison de joueurs** : Comparez les statistiques de 2 joueurs côte à côte
+- **Profils détaillés** : Consultez les profils complets des joueurs avec leurs stats
+- **Classements d'équipes** : Visualisez les classements par conférence (Est/Ouest)
+- **Leaders statistiques** : Découvrez les meilleurs joueurs dans différentes catégories
+
+## 🚀 Installation et Configuration
+
+### 1. Installer les dépendances
+```bash
+npm install
+```
+
+### 2. Configurer la clé API balldontlie
+
+Créez un fichier `.env` à la racine du projet :
+```bash
+cp .env.example .env
+```
+
+Éditez le fichier `.env` et ajoutez votre clé API balldontlie :
+```
+REACT_APP_BALLDONTLIE_API_KEY=votre_cle_api_ici
+```
+
+**Pour obtenir une clé API gratuite** : [balldontlie.io](https://www.balldontlie.io/)
+
+### 3. Lancer l'application
+```bash
+npm start
+```
+
+L'application sera accessible sur [http://localhost:3000](http://localhost:3000)
+
+## ⚠️ Limites de l'API gratuite
+
+L'API balldontlie gratuite a des **limites strictes** :
+- **60 requêtes par minute**
+- Si vous dépassez cette limite, vous devrez attendre 5-10 minutes
+
+### Comment éviter les erreurs de limite :
+1. ✅ Visitez **une seule page à la fois**
+2. ✅ Attendez le chargement complet avant de naviguer
+3. ✅ Ne rafraîchissez pas trop souvent
+4. ❌ Évitez d'ouvrir plusieurs onglets simultanément
+
+### Si vous voyez "Impossible de se connecter à l'API balldontlie" :
+C'est que vous avez atteint la limite. **Attendez 5-10 minutes** puis réessayez.
+
+📖 Plus de détails : Consultez [API_LIMITS.md](API_LIMITS.md)
 
 ## Available Scripts
 

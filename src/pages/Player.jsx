@@ -2,7 +2,10 @@
 import { useState, useEffect } from "react"; // Hooks React pour gérer l'état local et les effets
 import { motion } from "framer-motion"; // Pour les animations
 import PlayerStatsChart from "../components/PlayerStatsChart"; // Composant graphique des stats
-import { getPlayers, getPlayerWithStats } from "../services/nbaApi"; // Service API pour récupérer les joueurs
+import balldontlieApi from "../services/balldontlieApi"; // Service API balldontlie
+import { adaptPlayer, adaptStats } from "../services/dataAdapter"; // Adaptateurs de données
+import { getCache, setCache } from "../services/cacheService"; // Service de cache
+import { fallbackPlayers } from "../services/fallbackData"; // Données de fallback
 
 /**
  * Page principale pour comparer les joueurs NBA.
@@ -22,29 +25,88 @@ export default function Player() {
         setLoading(true);
         setError(null);
 
-        // Récupérer tous les joueurs (liste basique sans stats)
-        const response = await getPlayers();
+        // Vérifier d'abord le cache
+        const cachedPlayers = getCache('players_list');
+        if (cachedPlayers) {
+          console.log('Utilisation des joueurs depuis le cache');
+          setPlayers(cachedPlayers);
+          setLoading(false);
+          return;
+        }
 
-        // Transformer les données de l'API pour correspondre au format attendu par les composants
-        const transformedPlayers = response.players.map(player => ({
-          id: player.id,
-          name: player.display_name,
-          team: player.team_name,
-          // Ces données seront chargées dynamiquement quand on sélectionne un joueur
-          info: {
-            age: player.age,
-            height: `${Math.floor(player.height_cm / 100)}m${player.height_cm % 100}`,
-            weight: `${player.weight_kg} kg`,
-            position: player.position,
-            photo: player.photo_url || ''
-          },
-          // Placeholder pour lastGames - sera chargé à la sélection
-          lastGames: [],
-          // Stocker l'ID pour charger les stats plus tard
-          apiId: player.id
-        }));
+        try {
+          // Récupérer les joueurs (1 page = 100 joueurs pour limiter les requêtes API)
+          const response = await balldontlieApi.getPlayers({ per_page: 100 });
+          const allPlayers = response.players;
 
-        setPlayers(transformedPlayers);
+          // Transformer les données de l'API pour correspondre au format attendu par les composants
+          const transformedPlayers = allPlayers.map(player => {
+            const adapted = adaptPlayer(player);
+            return {
+              id: adapted.id,
+              name: adapted.display_name,
+              team: adapted.team_name,
+              // Ces données seront chargées dynamiquement quand on sélectionne un joueur
+              info: {
+                age: adapted.age,
+                height: adapted.height || 'N/A',
+                weight: adapted.weight || 'N/A',
+                position: adapted.position,
+                photo: adapted.photo_url || ''
+              },
+              // Placeholder pour lastGames - sera chargé à la sélection
+              lastGames: [],
+              // Stocker l'ID pour charger les stats plus tard
+              apiId: adapted.id
+            };
+          });
+
+          // Sauvegarder dans le cache
+          setCache('players_list', transformedPlayers);
+          setPlayers(transformedPlayers);
+        } catch (apiError) {
+          // Si l'API échoue, utiliser les données de fallback
+          console.warn('API non disponible, utilisation des données de fallback');
+
+          const fallbackTransformed = fallbackPlayers.map(player => {
+            // Adapter les stats de fallback au bon format
+            const adaptedLastGames = player.lastGames ? player.lastGames.map(game => ({
+              PTS: game.PTS || 0,
+              REB: game.REB || 0,
+              AST: game.AST || 0,
+              STL: game.STL || 0,
+              BLK: game.BLK || 0,
+              FG: game.FG || 0,
+              FGA: game.FGA || 0,
+              '3P': game['3P'] || 0,
+              '3PA': game['3PA'] || 0,
+              FT: game.FT || 0,
+              FTA: game.FTA || 0,
+              MIN: game.MIN || 0,
+              TOV: game.TOV || 0,
+              PF: game.PF || 0
+            })) : [];
+
+            return {
+              id: player.id,
+              name: player.display_name,
+              team: player.team_name,
+              info: {
+                age: null,
+                height: player.height || 'N/A',
+                weight: player.weight || 'N/A',
+                position: player.position,
+                photo: ''
+              },
+              lastGames: adaptedLastGames,
+              apiId: player.id,
+              hasStats: adaptedLastGames.length > 0 // Marquer que ce joueur a déjà des stats
+            };
+          });
+
+          setPlayers(fallbackTransformed);
+          setError('Mode démo : Utilisation de données d\'exemple. Attendez quelques minutes pour accéder aux données réelles.');
+        }
       } catch (err) {
         console.error('Erreur lors du chargement des joueurs:', err);
         setError(err.message || 'Impossible de charger les données');
@@ -74,13 +136,17 @@ export default function Player() {
       // Si le joueur n'a pas encore de stats (lastGames vide), les charger
       if (player.lastGames.length === 0) {
         try {
-          const playerWithStats = await getPlayerWithStats(player.id);
+          // Récupérer les statistiques récentes du joueur depuis balldontlie
+          const statsResult = await balldontlieApi.getPlayerRecentStats(player.id, 10);
+
+          // Adapter les stats au format de l'application
+          const adaptedStats = adaptStats(statsResult.stats);
 
           // Mettre à jour le joueur avec les stats dans la liste complète
           const updatedPlayer = {
             ...player,
-            lastGames: playerWithStats.lastGames || [],
-            info: playerWithStats.info || player.info
+            lastGames: adaptedStats,
+            info: player.info
           };
 
           // Mettre à jour la liste des joueurs pour garder les stats en cache
@@ -131,7 +197,7 @@ export default function Player() {
         >
           <h2 className="text-2xl font-bold mb-3">Erreur</h2>
           <p className="mb-4">{error}</p>
-          <p className="text-sm text-gray-600">Assurez-vous que l'API est lancée sur http://localhost:3001</p>
+          <p className="text-sm text-gray-600">Vérifiez votre connexion Internet et que votre clé API balldontlie est correctement configurée dans le fichier .env</p>
           <button
             onClick={() => window.location.reload()}
             className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"

@@ -2,7 +2,10 @@
 import React, { useState, useEffect } from "react"; // React et hooks d'état et d'effet
 import { motion } from "framer-motion"; // Pour les animations
 import TeamRankingTable from "../components/TeamRankingTable"; // Tableau de classement
-import { getStandings } from "../services/nbaApi"; // Service API pour récupérer les standings
+import balldontlieApi from "../services/balldontlieApi"; // Service API balldontlie
+import { adaptStandings } from "../services/dataAdapter"; // Adaptateur de données
+import { getCache, setCache } from "../services/cacheService"; // Service de cache
+import { fallbackTeams } from "../services/fallbackData"; // Données de fallback
 
 const Teams = () => {
   // États pour gérer la conférence sélectionnée, les données, le chargement et les erreurs
@@ -18,19 +21,68 @@ const Teams = () => {
         setLoading(true);
         setError(null);
 
-        // Appel à l'API avec filtre de conférence (si différent de "All")
-        const filters = conference === "All" ? {} : { conference };
-        const data = await getStandings(filters);
+        // Vérifier le cache
+        const cacheKey = `teams_${conference}`;
+        const cachedTeams = getCache(cacheKey);
+        if (cachedTeams) {
+          console.log('Utilisation des équipes depuis le cache');
+          setTeams(cachedTeams);
+          setLoading(false);
+          return;
+        }
 
-        // L'API retourne déjà les données triées par wins (DESC)
-        // On ajoute juste le rang
-        const teamsWithRank = data.map((team, index) => ({
-          ...team,
-          rank: index + 1,
-          percentage: team.win_percentage // L'API calcule déjà le pourcentage
-        }));
+        try {
+          // Récupérer la saison actuelle
+          const currentYear = new Date().getFullYear();
+          const season = new Date().getMonth() >= 9 ? currentYear : currentYear - 1;
 
-        setTeams(teamsWithRank);
+          // Appel à l'API balldontlie avec filtre de conférence (si différent de "All")
+          const filters = {
+            season: season,
+            ...(conference !== "All" && { conference })
+          };
+
+          const standingsResult = await balldontlieApi.getStandings(filters);
+
+          // Adapter les données au format de l'application
+          const adaptedStandings = adaptStandings(standingsResult.standings);
+
+          // Trier par pourcentage de victoires et ajouter le rang
+          const sortedTeams = adaptedStandings.sort((a, b) => {
+            const percentA = parseFloat(a.win_percentage);
+            const percentB = parseFloat(b.win_percentage);
+            return percentB - percentA;
+          });
+
+          const teamsWithRank = sortedTeams.map((team, index) => ({
+            ...team,
+            rank: index + 1,
+            percentage: team.win_percentage
+          }));
+
+          // Sauvegarder dans le cache
+          setCache(cacheKey, teamsWithRank);
+          setTeams(teamsWithRank);
+        } catch (apiError) {
+          // Utiliser les données de fallback
+          console.warn('API non disponible, utilisation des données de fallback');
+
+          let filteredFallback = fallbackTeams;
+          if (conference !== "All") {
+            filteredFallback = fallbackTeams.filter(team => team.conference === conference);
+          }
+
+          const teamsWithRank = filteredFallback
+            .sort((a, b) => parseFloat(b.win_percentage) - parseFloat(a.win_percentage))
+            .map((team, index) => ({
+              ...team,
+              rank: index + 1,
+              percentage: team.win_percentage
+            }));
+
+          setTeams(teamsWithRank);
+          setError('Mode démo : Utilisation de données d\'exemple. Attendez quelques minutes pour accéder aux données réelles.');
+        }
       } catch (err) {
         console.error('Erreur lors du chargement des équipes:', err);
         setError(err.message || 'Impossible de charger les données');
@@ -71,7 +123,7 @@ const Teams = () => {
         >
           <h2 className="text-2xl font-bold mb-3">Erreur</h2>
           <p className="mb-4">{error}</p>
-          <p className="text-sm text-gray-600">Assurez-vous que l'API est lancée sur http://localhost:3001</p>
+          <p className="text-sm text-gray-600">Vérifiez votre connexion Internet et que votre clé API balldontlie est correctement configurée dans le fichier .env</p>
           <button
             onClick={() => window.location.reload()}
             className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"

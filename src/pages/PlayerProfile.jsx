@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { getPlayerWithStats } from "../services/nbaApi";
+import balldontlieApi from "../services/balldontlieApi";
+import { adaptPlayer, adaptStats } from "../services/dataAdapter";
 
 /**
  * Page de profil détaillé d'un joueur NBA
@@ -18,7 +19,29 @@ export default function PlayerProfile() {
       try {
         setLoading(true);
         setError(null);
-        const playerData = await getPlayerWithStats(id);
+
+        // Récupérer les infos du joueur depuis balldontlie
+        const playerInfo = await balldontlieApi.getPlayer(id);
+
+        // Récupérer les statistiques récentes du joueur
+        const statsResult = await balldontlieApi.getPlayerRecentStats(id, 10);
+
+        // Adapter les données au format de l'application
+        const adaptedPlayer = adaptPlayer(playerInfo);
+        const adaptedStats = adaptStats(statsResult.stats);
+
+        // Combiner les données
+        const playerData = {
+          ...adaptedPlayer,
+          lastGames: adaptedStats,
+          info: {
+            height: adaptedPlayer.height,
+            weight: adaptedPlayer.weight,
+            age: adaptedPlayer.age,
+            photo: adaptedPlayer.photo_url
+          }
+        };
+
         setPlayer(playerData);
       } catch (err) {
         console.error('Erreur lors du chargement du joueur:', err);

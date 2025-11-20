@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { getPlayers } from "../services/nbaApi";
+import balldontlieApi from "../services/balldontlieApi";
+import { adaptPlayer, calculateAveragesFromGames, adaptStats } from "../services/dataAdapter";
 
 /**
  * Page des statistiques NBA - Leaders de la ligue
@@ -31,60 +32,50 @@ export default function Stats() {
         setLoading(true);
         setError(null);
 
-        const response = await getPlayers();
+        // Récupérer les joueurs depuis balldontlie (limité à 25 pour éviter trop de requêtes)
+        const response = await balldontlieApi.getPlayers({ per_page: 25 });
 
         // Fonction pour charger les stats d'un joueur
         const loadPlayerStats = async (player) => {
           try {
-            const statsResponse = await fetch(
-              `http://localhost:3001/api/v1/players/${player.id}/stats`
-            );
-            const statsData = await statsResponse.json();
+            const adaptedPlayer = adaptPlayer(player);
 
-            if (statsData.success && statsData.data.lastGames) {
-              const games = statsData.data.lastGames;
-              const gamesCount = games.length;
+            // Récupérer les stats récentes du joueur
+            const statsResult = await balldontlieApi.getPlayerRecentStats(player.id, 10);
+
+            if (statsResult.stats && statsResult.stats.length > 0) {
+              const adaptedGames = adaptStats(statsResult.stats);
+              const averages = calculateAveragesFromGames(adaptedGames);
 
               return {
-                id: player.id,
-                name: player.display_name,
-                team: player.team_abbreviation,
-                position: player.position,
-                photo: player.photo_url,
+                id: adaptedPlayer.id,
+                name: adaptedPlayer.display_name,
+                team: adaptedPlayer.team_abbreviation,
+                position: adaptedPlayer.position,
+                photo: adaptedPlayer.photo_url || 'https://via.placeholder.com/48x48/374151/FFFFFF?text=NBA',
                 stats: {
-                  points: (games.reduce((sum, g) => sum + g.PTS, 0) / gamesCount).toFixed(1),
-                  rebounds: (games.reduce((sum, g) => sum + g.REB, 0) / gamesCount).toFixed(1),
-                  assists: (games.reduce((sum, g) => sum + g.AST, 0) / gamesCount).toFixed(1),
-                  steals: (games.reduce((sum, g) => sum + g.STL, 0) / gamesCount).toFixed(1),
-                  blocks: (games.reduce((sum, g) => sum + g.BLK, 0) / gamesCount).toFixed(1),
-                  fieldGoalPct: (
-                    (games.reduce((sum, g) => sum + g.FG, 0) /
-                      games.reduce((sum, g) => sum + g.FGA, 0)) *
-                    100
-                  ).toFixed(1),
-                  threePointPct: (
-                    (games.reduce((sum, g) => sum + g["3P"], 0) /
-                      games.reduce((sum, g) => sum + g["3PA"], 0)) *
-                    100
-                  ).toFixed(1),
-                  freeThrowPct: (
-                    (games.reduce((sum, g) => sum + g.FT, 0) /
-                      games.reduce((sum, g) => sum + g.FTA, 0)) *
-                    100
-                  ).toFixed(1),
-                  gamesPlayed: gamesCount,
+                  points: parseFloat(averages.PTS) || 0,
+                  rebounds: parseFloat(averages.REB) || 0,
+                  assists: parseFloat(averages.AST) || 0,
+                  steals: parseFloat(averages.STL) || 0,
+                  blocks: parseFloat(averages.BLK) || 0,
+                  fieldGoalPct: parseFloat(averages.FG_PCT) || 0,
+                  threePointPct: parseFloat(averages.FG3_PCT) || 0,
+                  freeThrowPct: parseFloat(averages.FT_PCT) || 0,
+                  gamesPlayed: adaptedGames.length,
                 },
               };
             }
             return null;
-          } catch {
+          } catch (err) {
+            console.error(`Erreur pour le joueur ${player.id}:`, err);
             return null;
           }
         };
 
-        // Charger les stats par lots de 10 joueurs avec un délai entre chaque lot
-        const allPlayers = response.players.slice(0, 30);
-        const batchSize = 10;
+        // Charger les stats par lots de 3 joueurs avec un délai entre chaque lot
+        const allPlayers = response.players.slice(0, 20); // Top 20 joueurs
+        const batchSize = 3;
         const playersWithStats = [];
 
         for (let i = 0; i < allPlayers.length; i += batchSize) {
@@ -92,9 +83,9 @@ export default function Stats() {
           const batchResults = await Promise.all(batch.map(loadPlayerStats));
           playersWithStats.push(...batchResults.filter(p => p !== null));
 
-          // Attendre 500ms entre chaque lot pour éviter de surcharger l'API
+          // Attendre 2000ms entre chaque lot pour éviter de surcharger l'API
           if (i + batchSize < allPlayers.length) {
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 2000));
           }
         }
 
