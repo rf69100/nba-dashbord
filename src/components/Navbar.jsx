@@ -21,6 +21,7 @@ export default function Navbar() {
         <Link to="/" className="hover:text-yellow-400 transition">Home</Link>
         <Link to="/player" className="hover:text-yellow-400 transition">Players</Link>
         <Link to="/teams" className="hover:text-yellow-400 transition">Teams</Link>
+        <Link to="/stats" className="hover:text-yellow-400 transition">Stats</Link>
       </div>
     </motion.nav>
   );
