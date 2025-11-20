@@ -3,6 +3,7 @@ import { HashRouter as Router, Routes, Route } from "react-router-dom"; // Routi
 import Navbar from "./components/Navbar"; // Barre de navigation
 import Home from "./pages/Home"; // Page d'accueil
 import Player from "./pages/Player"; // Page de comparaison joueurs
+import PlayerProfile from "./pages/PlayerProfile"; // Page de profil joueur
 import Teams from "./pages/Teams"; // Page classement équipes
 
 /**
@@ -20,6 +21,8 @@ function App() {
           <Route path="/" element={<Home />} />
           {/* Route vers la page de comparaison des joueurs */}
           <Route path="/player" element={<Player />} />
+          {/* Route vers le profil d'un joueur */}
+          <Route path="/player/:id" element={<PlayerProfile />} />
           {/* Route vers la page du classement des équipes */}
           <Route path="/teams" element={<Teams />} />
         </Routes>

@@ -1,10 +1,6 @@
 const Player = require('../models/Player');
 const { successResponse, errorResponse } = require('../utils/responseFormatter');
 
-// Import temporaire des données statiques pour les statistiques
-// TODO: Remplacer par vraies données BDD quand player_stats sera peuplé
-const { players: playersData } = require('../../../src/services/nbaData');
-
 /**
  * Récupérer tous les joueurs
  * GET /api/v1/players
@@ -52,21 +48,6 @@ const getPlayerWithStats = async (req, res, next) => {
 
     if (!player) {
       return errorResponse(res, 'Player not found', 404);
-    }
-
-    // TEMPORAIRE: Récupérer les stats depuis nbaData.js
-    const staticPlayer = playersData.find(p => p.id === parseInt(req.params.id));
-    if (staticPlayer && staticPlayer.lastGames) {
-      player.lastGames = staticPlayer.lastGames;
-
-      // Ajouter les infos formatées pour compatibilité
-      player.info = {
-        age: player.age,
-        height: `${Math.floor(player.height_cm / 100)}m${player.height_cm % 100}`.padStart(4, '0'),
-        weight: `${player.weight_kg} kg`,
-        position: player.position,
-        photo: player.photo_url || ''
-      };
     }
 
     return successResponse(res, player, 'Player with stats retrieved successfully');

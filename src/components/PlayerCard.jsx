@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 /**
  * Carte d'affichage des informations et statistiques moyennes d'un joueur NBA.
@@ -86,7 +87,7 @@ export default function PlayerCard({ player }) {
       </div>
 
       {/* Statistiques moyennes */}
-      <div className="grid grid-cols-3 gap-4 text-center text-sm w-full">
+      <div className="grid grid-cols-3 gap-4 text-center text-sm w-full mb-6">
         <div>
           <p className="font-bold">{avg("PTS")}</p>
           <p className="text-white/60">PTS</p>
@@ -120,6 +121,14 @@ export default function PlayerCard({ player }) {
           <p className="text-white/60">FT%</p>
         </div>
       </div>
+
+      {/* Bouton pour voir le profil complet */}
+      <Link
+        to={`/player/${player.id}`}
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-center"
+      >
+        Voir le profil complet
+      </Link>
     </motion.div>
   );
 }

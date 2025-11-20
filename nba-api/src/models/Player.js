@@ -130,9 +130,53 @@ class Player {
       const player = await this.findById(id);
       if (!player) return null;
 
-      // TODO: Récupérer les vraies stats depuis player_stats
-      // Pour l'instant, on retourne le joueur sans stats détaillées
-      player.lastGames = [];
+      // Récupérer les stats des derniers matchs depuis player_stats
+      const [stats] = await pool.query(
+        `SELECT
+          points as PTS,
+          rebounds as REB,
+          assists as AST,
+          steals as STL,
+          blocks as BLK,
+          field_goals_made as FG,
+          field_goals_attempted as FGA,
+          three_pointers_made as \`3P\`,
+          three_pointers_attempted as \`3PA\`,
+          free_throws_made as FT,
+          free_throws_attempted as FTA
+        FROM player_stats
+        WHERE player_id = ?
+        ORDER BY id DESC
+        LIMIT ?`,
+        [id, limit]
+      );
+
+      // Convertir les valeurs DECIMAL (strings) en nombres pour les calculs
+      const convertedStats = stats.map(game => ({
+        PTS: Number(game.PTS),
+        REB: Number(game.REB),
+        AST: Number(game.AST),
+        STL: Number(game.STL),
+        BLK: Number(game.BLK),
+        FG: Number(game.FG),
+        FGA: Number(game.FGA),
+        '3P': Number(game['3P']),
+        '3PA': Number(game['3PA']),
+        FT: Number(game.FT),
+        FTA: Number(game.FTA)
+      }));
+
+      // Ajouter les stats au joueur
+      player.lastGames = convertedStats;
+
+      // Ajouter les infos formatées pour compatibilité frontend
+      player.info = {
+        age: player.age,
+        height: `${Math.floor(player.height_cm / 100)}m${(player.height_cm % 100).toString().padStart(2, '0')}`,
+        weight: `${player.weight_kg} kg`,
+        position: player.position,
+        photo: player.photo_url || ''
+      };
 
       return player;
     } catch (error) {

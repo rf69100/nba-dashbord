@@ -73,26 +73,55 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
       )}
 
       {/* Barre de recherche pour filtrer les joueurs */}
-      <input
-        type="text"
-        placeholder="Rechercher un joueur..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full mb-6 px-4 py-2 border rounded-lg text-gray-900"
-      />
+      <div className="relative mb-6">
+        <input
+          type="text"
+          placeholder="Rechercher un joueur par nom..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full px-4 py-3 border-2 border-blue-300 rounded-lg text-gray-900 focus:border-blue-500 focus:outline-none transition-colors"
+        />
+        {search && (
+          <button
+            onClick={() => setSearch("")}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 font-bold text-xl"
+          >
+            ✕
+          </button>
+        )}
+      </div>
 
       {/* Affichage des résultats filtrés pour sélection rapide */}
       {search && filteredPlayers.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-6 max-h-40 overflow-y-auto">
-          {filteredPlayers.map((p) => (
-            <button
-              key={p.id}
-              onClick={() => togglePlayer(p)}
-              className="bg-blue-600 text-white px-3 py-1 rounded-full hover:bg-blue-700 font-semibold"
-            >
-              {p.name}
-            </button>
-          ))}
+        <div className="mb-6 bg-white/50 rounded-lg p-4 max-h-96 overflow-y-auto">
+          <div className="text-sm text-gray-700 font-semibold mb-3">
+            {filteredPlayers.length} résultat{filteredPlayers.length > 1 ? 's' : ''} trouvé{filteredPlayers.length > 1 ? 's' : ''}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {filteredPlayers.map((p) => (
+              <button
+                key={p.id}
+                onClick={() => {
+                  togglePlayer(p);
+                  setSearch("");
+                }}
+                className="bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 font-semibold text-left flex items-center justify-between group transition-all duration-200 hover:scale-105 hover:shadow-lg"
+              >
+                <div className="flex flex-col">
+                  <span className="font-bold">{p.name}</span>
+                  <span className="text-xs text-blue-200">{p.team} • {p.info.position}</span>
+                </div>
+                <span className="text-2xl opacity-0 group-hover:opacity-100 transition-opacity">+</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Message si aucun résultat */}
+      {search && filteredPlayers.length === 0 && (
+        <div className="mb-6 bg-red-100 text-red-700 p-4 rounded-lg text-center">
+          Aucun joueur trouvé pour "{search}"
         </div>
       )}
 
