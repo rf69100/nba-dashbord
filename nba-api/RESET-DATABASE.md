@@ -5,6 +5,8 @@
 La base de données a été complètement réinitialisée et remplie avec :
 - ✅ **30 équipes NBA** avec toutes leurs informations (logos, arenas, divisions, etc.)
 - ✅ **312 joueurs actifs** de la saison 2024-2025 (tous les rosters complets)
+- ✅ **159 photos de joueurs** (URLs officielles NBA.com)
+- ✅ **78 joueurs avec statistiques** complètes de la saison
 - ✅ **Classement de la saison 2024-25** avec les vraies statistiques
 - ✅ **Schéma de base de données** complet avec toutes les tables
 
@@ -20,17 +22,27 @@ La base de données a été complètement réinitialisée et remplie avec :
 
 ## Fichiers générés
 
-### Fichier SQL principal pour tous les joueurs :
+### Fichiers SQL principaux :
 ```
 database/populate-all-players-2024-25.sql
 ```
 Ce fichier contient les 312 joueurs de la saison 2024-2025 avec tous les rosters complets.
 
-### Script de génération :
+```
+database/add-photos-and-stats.sql
+```
+Ce fichier ajoute les photos (URLs NBA.com) et les statistiques pour 78 joueurs vedettes.
+
+### Scripts de génération :
 ```
 scripts/generate-all-players-2024-25.js
 ```
 Script Node.js pour régénérer le fichier SQL des joueurs si besoin.
+
+```
+scripts/add-player-photos-and-stats.js
+```
+Script pour générer les photos et stats des joueurs.
 
 ## Comment réinitialiser la base de données
 
@@ -53,6 +65,9 @@ mysql -u nba_user -p'nba_password' nba_database -e "ALTER TABLE players ADD COLU
 
 # 4. Insérer tous les joueurs
 mysql -u nba_user -p'nba_password' nba_database < database/populate-all-players-2024-25.sql
+
+# 5. Ajouter les photos et statistiques
+mysql -u nba_user -p'nba_password' nba_database < database/add-photos-and-stats.sql
 ```
 
 ### Option 2 : Script automatique
