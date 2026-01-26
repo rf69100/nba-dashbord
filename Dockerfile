@@ -1,19 +1,12 @@
-# Multi-stage build for React frontend
+# Build stage for React frontend
 FROM node:20-alpine AS build
 
-# Build arguments
-ARG REACT_APP_API_URL=http://localhost:3001/api/v1
-
-# Set environment variables for build
-ENV REACT_APP_API_URL=$REACT_APP_API_URL
-
-# Set working directory
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (including dev dependencies for build)
+# Install dependencies
 RUN npm ci
 
 # Copy source code
