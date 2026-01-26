@@ -21,3 +21,15 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Docker environment files (contiennent des mots de passe)
+.env
+.env.docker
+.env.production
+
+# Docker volumes
+mariadb_data/
+
+# Logs
+logs/
+*.log

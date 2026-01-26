@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { getPlayers } from "../services/nbaApi";
+import { getPlayers, getPlayerWithStats } from "../services/nbaApi";
 
 /**
  * Page des statistiques NBA - Leaders de la ligue
@@ -33,24 +33,21 @@ export default function Stats() {
 
         const response = await getPlayers();
 
-        // Fonction pour charger les stats d'un joueur
+        // Fonction pour charger les stats d'un joueur via le service local
         const loadPlayerStats = async (player) => {
           try {
-            const statsResponse = await fetch(
-              `http://localhost:3001/api/v1/players/${player.id}/stats`
-            );
-            const statsData = await statsResponse.json();
+            const playerData = await getPlayerWithStats(player.id);
 
-            if (statsData.success && statsData.data.lastGames) {
-              const games = statsData.data.lastGames;
+            if (playerData && playerData.lastGames) {
+              const games = playerData.lastGames;
               const gamesCount = games.length;
 
               return {
                 id: player.id,
-                name: player.display_name,
-                team: player.team_abbreviation,
-                position: player.position,
-                photo: player.photo_url,
+                name: playerData.display_name || playerData.name,
+                team: playerData.team_abbreviation,
+                position: playerData.position,
+                photo: playerData.photo_url || playerData.info?.photo,
                 stats: {
                   points: (games.reduce((sum, g) => sum + g.PTS, 0) / gamesCount).toFixed(1),
                   rebounds: (games.reduce((sum, g) => sum + g.REB, 0) / gamesCount).toFixed(1),
@@ -82,23 +79,11 @@ export default function Stats() {
           }
         };
 
-        // Charger les stats par lots de 10 joueurs avec un délai entre chaque lot
+        // Charger les stats de tous les joueurs
         const allPlayers = response.players.slice(0, 30);
-        const batchSize = 10;
-        const playersWithStats = [];
+        const playersWithStats = await Promise.all(allPlayers.map(loadPlayerStats));
 
-        for (let i = 0; i < allPlayers.length; i += batchSize) {
-          const batch = allPlayers.slice(i, i + batchSize);
-          const batchResults = await Promise.all(batch.map(loadPlayerStats));
-          playersWithStats.push(...batchResults.filter(p => p !== null));
-
-          // Attendre 500ms entre chaque lot pour éviter de surcharger l'API
-          if (i + batchSize < allPlayers.length) {
-            await new Promise(resolve => setTimeout(resolve, 500));
-          }
-        }
-
-        setPlayers(playersWithStats);
+        setPlayers(playersWithStats.filter(p => p !== null));
       } catch (err) {
         console.error("Erreur lors du chargement des stats:", err);
         setError(err.message || "Impossible de charger les données");
@@ -315,7 +300,7 @@ export default function Stats() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          <h3 className="text-xl font-bold mb-2 text-blue-400">💡 About These Stats</h3>
+          <h3 className="text-xl font-bold mb-2 text-blue-400">About These Stats</h3>
           <p className="text-gray-300">
             These statistics are calculated from the last 10 games played by each player during the 2024-25 NBA season.
             Rankings are updated based on per-game averages across all statistical categories.

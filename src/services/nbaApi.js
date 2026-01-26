@@ -1,72 +1,9 @@
 /**
- * Service API pour communiquer avec le backend NBA API
- *
- * Ce service remplace progressivement nbaData.js en appelant
- * l'API REST au lieu d'utiliser des données statiques.
+ * Service API local pour le dashboard NBA
+ * Utilise les données statiques de nbaData.js au lieu d'appels API externes
  */
 
-// Configuration de l'URL de base de l'API
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api/v1';
-
-/**
- * Classe de gestion des erreurs API
- */
-class ApiError extends Error {
-  constructor(message, status, data) {
-    super(message);
-    this.name = 'ApiError';
-    this.status = status;
-    this.data = data;
-  }
-}
-
-/**
- * Fonction utilitaire pour gérer les appels fetch
- * @param {string} endpoint - L'endpoint à appeler (ex: '/teams/standings')
- * @param {object} options - Options fetch (method, headers, body...)
- * @returns {Promise} - Promesse contenant les données ou une erreur
- */
-const fetchFromAPI = async (endpoint, options = {}) => {
-  try {
-    const url = `${API_BASE_URL}${endpoint}`;
-
-    const defaultOptions = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-    };
-
-    const response = await fetch(url, { ...defaultOptions, ...options });
-
-    // Récupérer le corps de la réponse
-    const data = await response.json();
-
-    // Si la réponse n'est pas OK, lever une erreur
-    if (!response.ok) {
-      throw new ApiError(
-        data.message || 'Une erreur est survenue',
-        response.status,
-        data
-      );
-    }
-
-    return data;
-  } catch (error) {
-    // Si c'est déjà une ApiError, la relancer
-    if (error instanceof ApiError) {
-      throw error;
-    }
-
-    // Si c'est une erreur réseau ou autre
-    console.error('Erreur de connexion à l\'API:', error);
-    throw new ApiError(
-      'Impossible de se connecter à l\'API. Vérifiez que le serveur est lancé.',
-      0,
-      null
-    );
-  }
-};
+import { teams, players, getTeamsWithStats } from './nbaData';
 
 /**
  * ========================================
@@ -80,16 +17,20 @@ const fetchFromAPI = async (endpoint, options = {}) => {
  * @returns {Promise<Array>} - Tableau des équipes avec leurs statistiques
  */
 export const getStandings = async (filters = {}) => {
-  const queryParams = new URLSearchParams();
+  // Simuler un délai réseau minime pour UX
+  await new Promise(resolve => setTimeout(resolve, 100));
 
+  let teamsData = getTeamsWithStats();
+
+  // Filtrer par conférence si spécifié
   if (filters.conference) {
-    queryParams.append('conference', filters.conference);
+    teamsData = teamsData.filter(team => team.conference === filters.conference);
   }
 
-  const endpoint = `/teams/standings${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+  // Trier par nombre de victoires (décroissant)
+  teamsData.sort((a, b) => b.wins - a.wins);
 
-  const response = await fetchFromAPI(endpoint);
-  return response.data;
+  return teamsData;
 };
 
 /**
@@ -98,19 +39,29 @@ export const getStandings = async (filters = {}) => {
  * @returns {Promise<object>} - { teams: Array, pagination: Object }
  */
 export const getTeams = async (filters = {}) => {
-  const queryParams = new URLSearchParams();
+  await new Promise(resolve => setTimeout(resolve, 100));
 
-  if (filters.conference) queryParams.append('conference', filters.conference);
-  if (filters.division) queryParams.append('division', filters.division);
-  if (filters.page) queryParams.append('page', filters.page);
-  if (filters.limit) queryParams.append('limit', filters.limit);
+  let teamsData = [...teams];
 
-  const endpoint = `/teams${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+  // Filtrer par conférence si spécifié
+  if (filters.conference) {
+    teamsData = teamsData.filter(team => team.conference === filters.conference);
+  }
 
-  const response = await fetchFromAPI(endpoint);
+  // Pagination
+  const page = filters.page || 1;
+  const limit = filters.limit || teamsData.length;
+  const startIndex = (page - 1) * limit;
+  const paginatedTeams = teamsData.slice(startIndex, startIndex + limit);
+
   return {
-    teams: response.data,
-    pagination: response.pagination
+    teams: paginatedTeams,
+    pagination: {
+      total: teamsData.length,
+      page,
+      limit,
+      totalPages: Math.ceil(teamsData.length / limit)
+    }
   };
 };
 
@@ -120,8 +71,16 @@ export const getTeams = async (filters = {}) => {
  * @returns {Promise<object>} - Équipe avec statistiques
  */
 export const getTeamWithStats = async (teamId) => {
-  const response = await fetchFromAPI(`/teams/${teamId}/stats`);
-  return response.data;
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  const teamsWithStats = getTeamsWithStats();
+  const team = teamsWithStats.find(t => t.id === parseInt(teamId));
+
+  if (!team) {
+    throw new Error('Équipe non trouvée');
+  }
+
+  return team;
 };
 
 /**
@@ -130,8 +89,15 @@ export const getTeamWithStats = async (teamId) => {
  * @returns {Promise<object>} - Équipe
  */
 export const getTeam = async (teamId) => {
-  const response = await fetchFromAPI(`/teams/${teamId}`);
-  return response.data;
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  const team = teams.find(t => t.id === parseInt(teamId));
+
+  if (!team) {
+    throw new Error('Équipe non trouvée');
+  }
+
+  return team;
 };
 
 /**
@@ -146,19 +112,39 @@ export const getTeam = async (teamId) => {
  * @returns {Promise<object>} - { players: Array, pagination: Object }
  */
 export const getPlayers = async (filters = {}) => {
-  const queryParams = new URLSearchParams();
+  await new Promise(resolve => setTimeout(resolve, 100));
 
-  if (filters.team_id) queryParams.append('team_id', filters.team_id);
-  if (filters.position) queryParams.append('position', filters.position);
-  if (filters.page) queryParams.append('page', filters.page);
-  if (filters.limit) queryParams.append('limit', filters.limit);
+  let playersData = [...players];
 
-  const endpoint = `/players${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+  // Filtrer par équipe si spécifié
+  if (filters.team_id) {
+    const team = teams.find(t => t.id === parseInt(filters.team_id));
+    if (team) {
+      playersData = playersData.filter(p => p.team_name === team.name);
+    }
+  }
 
-  const response = await fetchFromAPI(endpoint);
+  // Filtrer par position si spécifié
+  if (filters.position) {
+    playersData = playersData.filter(p =>
+      p.position.toLowerCase().includes(filters.position.toLowerCase())
+    );
+  }
+
+  // Pagination
+  const page = filters.page || 1;
+  const limit = filters.limit || playersData.length;
+  const startIndex = (page - 1) * limit;
+  const paginatedPlayers = playersData.slice(startIndex, startIndex + limit);
+
   return {
-    players: response.data,
-    pagination: response.pagination
+    players: paginatedPlayers,
+    pagination: {
+      total: playersData.length,
+      page,
+      limit,
+      totalPages: Math.ceil(playersData.length / limit)
+    }
   };
 };
 
@@ -168,18 +154,34 @@ export const getPlayers = async (filters = {}) => {
  * @returns {Promise<object>} - Joueur avec statistiques (inclut lastGames)
  */
 export const getPlayerWithStats = async (playerId) => {
-  const response = await fetchFromAPI(`/players/${playerId}/stats`);
-  return response.data;
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  const player = players.find(p => p.id === parseInt(playerId));
+
+  if (!player) {
+    throw new Error('Joueur non trouvé');
+  }
+
+  return player;
 };
 
 /**
- * Récupérer un joueur spécifique (sans statistiques)
+ * Récupérer un joueur spécifique (sans statistiques détaillées)
  * @param {number} playerId - ID du joueur
  * @returns {Promise<object>} - Joueur
  */
 export const getPlayer = async (playerId) => {
-  const response = await fetchFromAPI(`/players/${playerId}`);
-  return response.data;
+  await new Promise(resolve => setTimeout(resolve, 100));
+
+  const player = players.find(p => p.id === parseInt(playerId));
+
+  if (!player) {
+    throw new Error('Joueur non trouvé');
+  }
+
+  // Retourner sans les lastGames pour une version allégée
+  const { lastGames, ...playerWithoutGames } = player;
+  return playerWithoutGames;
 };
 
 /**
