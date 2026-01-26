@@ -8,7 +8,8 @@ import React from "react";
 const TeamLogo = ({ teamName }) => {
   // Transforme le nom de l'équipe en format minuscule avec tirets
   const fileName = teamName.toLowerCase().replace(/\s+/g, "-");
-  const logoPath = `${process.env.PUBLIC_URL}/images/nba-logos/${fileName}.svg`;
+  const BASE_URL = process.env.PUBLIC_URL || '/';
+  const logoPath = `${BASE_URL}images/nba-logos/${fileName}.svg`;
 
   return (
     <img
