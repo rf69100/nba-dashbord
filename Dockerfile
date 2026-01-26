@@ -1,13 +1,11 @@
 # Multi-stage build for React frontend
 FROM node:20-alpine AS build
 
-# Build arguments - PUBLIC_URL defaults to /nba-dashboard/ for VPS deployment
-ARG REACT_APP_API_URL=https://ryanfonseca.fr/api/v1
-ARG PUBLIC_URL=/nba-dashboard/
+# Build arguments
+ARG REACT_APP_API_URL=http://localhost:3001/api/v1
 
 # Set environment variables for build
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
-ENV PUBLIC_URL=$PUBLIC_URL
 
 # Set working directory
 WORKDIR /app
