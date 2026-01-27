@@ -1,5 +1,5 @@
 // Importation des modules nécessaires
-import { HashRouter as Router, Routes, Route } from "react-router-dom"; // Routing
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Routing
 import Navbar from "./components/Navbar"; // Barre de navigation
 import Home from "./pages/Home"; // Page d'accueil
 import Player from "./pages/Player"; // Page de comparaison joueurs
