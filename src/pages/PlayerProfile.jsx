@@ -118,9 +118,10 @@ export default function PlayerProfile() {
               />
               {player.team_logo_url && (
                 <img
-                  src={player.team_logo_url}
+                  src={`${process.env.PUBLIC_URL}${player.team_logo_url}`}
                   alt={player.team_name}
                   className="absolute -bottom-4 -right-4 w-20 h-20 bg-white rounded-full p-2 shadow-xl"
+                  onError={(e) => { e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`; }}
                 />
               )}
             </div>
