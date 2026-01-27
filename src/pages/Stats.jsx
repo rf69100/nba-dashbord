@@ -235,7 +235,7 @@ export default function Stats() {
                           alt={player.name}
                           className="w-12 h-12 rounded-full object-cover border-2 border-gray-600"
                           onError={(e) => {
-                            e.target.src = 'https://via.placeholder.com/48x48/374151/FFFFFF?text=NBA';
+                            e.target.src = '/api/placeholder/48/48';
                           }}
                         />
                         <div>
