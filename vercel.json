@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "build",
+  "public": false,
+  "env": {},
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "^/(?:.+/)?(?:index\\.html)?$",
+      "destination": "/index.html",
+      "status": 200
+    },
+    {
+      "src": "/(.*)\\.(js|css|gif|ico|jpg|jpeg|jpg|png|svg|webp|woff|woff2|eot|otf|ttf)$",
+      "headers": {
+        "Cache-Control": "max-age=31536000, immutable"
+      }
+    }
+  ]
+}
