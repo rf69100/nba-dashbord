@@ -61,6 +61,10 @@ export default function PlayerCard({ player }) {
         src={player.info.photo}
         alt={player.name}
         className="w-32 h-32 object-cover rounded-full border-4 border-white shadow-md mb-4"
+        onError={(e) => {
+          const name = player.name.replace(' ', '+');
+          e.target.src = `https://ui-avatars.com/api/?name=${name}&size=256&background=random&color=fff&bold=true`;
+        }}
       />
 
       {/* Nom & équipe */}

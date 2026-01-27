@@ -112,7 +112,8 @@ export default function PlayerProfile() {
                 alt={player.display_name}
                 className="w-64 h-64 object-cover rounded-lg border-4 border-white shadow-2xl"
                 onError={(e) => {
-                  e.target.src = '/api/placeholder/256/256';
+                  const name = (player.display_name || player.name).replace(' ', '+');
+                  e.target.src = `https://ui-avatars.com/api/?name=${name}&size=256&background=3B82F6&color=fff&bold=true`;
                 }}
               />
               {player.team_logo_url && (

@@ -253,7 +253,8 @@ export default function Stats() {
                           alt={player.name}
                           className="w-12 h-12 rounded-full object-cover border-2 border-gray-600"
                           onError={(e) => {
-                            e.target.src = '/api/placeholder/48/48';
+                            const name = player.name.replace(' ', '+');
+                            e.target.src = `https://ui-avatars.com/api/?name=${name}&size=48&background=374151&color=fff&bold=true`;
                           }}
                         />
                         <div>
