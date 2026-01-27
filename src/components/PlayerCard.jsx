@@ -1,85 +1,133 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import StatCard from "./StatCard";
-import { calculateAverage, calculatePercentage } from "../utils/helpers";
 
+/**
+ * Carte d'affichage des informations et statistiques moyennes d'un joueur NBA.
+ * @param {Object} player - Données du joueur à afficher
+ */
 export default function PlayerCard({ player }) {
+  // Nombre de matchs pris en compte
   const games = player.lastGames.length;
 
+  // Protection si aucun match n'est disponible
   if (games === 0) {
     return (
-      <motion.div className="nba-card text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        <p className="text-white/60">No statistics available</p>
+      <motion.div
+        className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg text-white w-full md:w-80 flex flex-col items-center"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <p className="text-center">Aucune statistique disponible</p>
       </motion.div>
     );
   }
 
-  const stats = {
-    pts: calculateAverage(player.lastGames, "PTS"),
-    reb: calculateAverage(player.lastGames, "REB"),
-    ast: calculateAverage(player.lastGames, "AST"),
-    fgPct: calculatePercentage(player.lastGames, "FG", "FGA"),
-    threePct: calculatePercentage(player.lastGames, "3P", "3PA"),
-    ftPct: calculatePercentage(player.lastGames, "FT", "FTA"),
-  };
+  /**
+   * Calcule la moyenne d'une statistique sur les derniers matchs
+   * @param {string} stat - Clé de la statistique (ex: "PTS")
+   * @returns {string} Moyenne arrondie à 1 décimale
+   */
+  const avg = (stat) =>
+    (player.lastGames.reduce((sum, g) => sum + g[stat], 0) / games).toFixed(1);
 
+  // Pourcentages de réussite
+  const fgPct = (
+    (player.lastGames.reduce((sum, g) => sum + g.FG, 0) /
+      player.lastGames.reduce((sum, g) => sum + g.FGA, 0)) *
+    100
+  ).toFixed(1);
+
+  const threePct = (
+    (player.lastGames.reduce((sum, g) => sum + g["3P"], 0) /
+      player.lastGames.reduce((sum, g) => sum + g["3PA"], 0)) *
+    100
+  ).toFixed(1);
+
+  const ftPct = (
+    (player.lastGames.reduce((sum, g) => sum + g.FT, 0) /
+      player.lastGames.reduce((sum, g) => sum + g.FTA, 0)) *
+    100
+  ).toFixed(1);
+
+  // Rendu de la carte joueur
   return (
     <motion.div
-      className="nba-card-hover flex flex-col items-center group"
-      initial={{ opacity: 0, y: 20 }}
+      className="bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg text-white w-full md:w-80 flex flex-col items-center"
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -5 }}
     >
-      {/* Player Photo */}
-      <div className="relative mb-6">
-        <img
-          src={player.photo_url || player.info?.photo}
-          alt={player.name}
-          className="w-32 h-32 object-cover rounded-full border-4 border-yellow-400 shadow-lg group-hover:scale-110 transition-transform"
-          onError={(e) => (e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`)}
-        />
-        <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-gray-900 font-bold px-3 py-1 rounded-full text-sm">
-          #{player.jersey_number || "00"}
+      {/* Photo du joueur */}
+      <img
+        src={player.info.photo}
+        alt={player.name}
+        className="w-32 h-32 object-cover rounded-full border-4 border-white shadow-md mb-4"
+      />
+
+      {/* Nom & équipe */}
+      <h2 className="text-2xl font-bold text-center">{player.name}</h2>
+      <p className="text-center text-white/70 mt-2">{player.team}</p>
+      <p className="text-sm text-white/60 italic mb-4">
+        {player.info.position}
+      </p>
+
+      {/* Informations physiques */}
+      <div className="flex justify-center gap-6 text-sm mb-6">
+        <div className="text-center">
+          <p className="font-bold">{player.info.age}</p>
+          <p className="text-white/60">Âge</p>
+        </div>
+        <div className="text-center">
+          <p className="font-bold">{player.info.height}</p>
+          <p className="text-white/60">Taille</p>
+        </div>
+        <div className="text-center">
+          <p className="font-bold">{player.info.weight}</p>
+          <p className="text-white/60">Poids</p>
         </div>
       </div>
 
-      {/* Player Info */}
-      <h2 className="text-2xl font-black text-center nba-gradient-text mb-2">{player.name}</h2>
-      <p className="text-yellow-400 font-bold">{player.team_name || player.team}</p>
-      <p className="text-sm text-white/60 italic mb-4">{player.position}</p>
-
-      {/* Physical Info */}
-      <div className="grid grid-cols-3 gap-4 w-full mb-6 text-xs">
-        <div className="nba-stat">
-          <div className="font-bold text-yellow-400">{player.age || player.info?.age}</div>
-          <div className="text-white/60">AGE</div>
+      {/* Statistiques moyennes */}
+      <div className="grid grid-cols-3 gap-4 text-center text-sm w-full mb-6">
+        <div>
+          <p className="font-bold">{avg("PTS")}</p>
+          <p className="text-white/60">PTS</p>
         </div>
-        <div className="nba-stat">
-          <div className="font-bold text-yellow-400">{player.height_cm || player.info?.height}</div>
-          <div className="text-white/60">HT</div>
+        <div>
+          <p className="font-bold">{avg("REB")}</p>
+          <p className="text-white/60">REB</p>
         </div>
-        <div className="nba-stat">
-          <div className="font-bold text-yellow-400">{player.weight_kg || player.info?.weight}</div>
-          <div className="text-white/60">WT</div>
+        <div>
+          <p className="font-bold">{avg("AST")}</p>
+          <p className="text-white/60">AST</p>
+        </div>
+        <div>
+          <p className="font-bold">{avg("STL")}</p>
+          <p className="text-white/60">STL</p>
+        </div>
+        <div>
+          <p className="font-bold">{avg("BLK")}</p>
+          <p className="text-white/60">BLK</p>
+        </div>
+        <div>
+          <p className="font-bold">{fgPct}%</p>
+          <p className="text-white/60">FG%</p>
+        </div>
+        <div>
+          <p className="font-bold">{threePct}%</p>
+          <p className="text-white/60">3P%</p>
+        </div>
+        <div>
+          <p className="font-bold">{ftPct}%</p>
+          <p className="text-white/60">FT%</p>
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-3 gap-3 w-full mb-6">
-        <StatCard label="PPG" value={stats.pts} icon="🎯" />
-        <StatCard label="RPG" value={stats.reb} icon="🔄" />
-        <StatCard label="APG" value={stats.ast} icon="🎯" />
-        <StatCard label="FG%" value={`${stats.fgPct}%`} icon="📊" />
-        <StatCard label="3P%" value={`${stats.threePct}%`} icon="🎯" />
-        <StatCard label="FT%" value={`${stats.ftPct}%`} icon="✅" />
-      </div>
-
-      {/* Profile Link */}
+      {/* Bouton pour voir le profil complet */}
       <Link
         to={`/player/${player.id}`}
-        className="nba-btn-secondary w-full text-center group-hover:shadow-lg transition-all"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-center"
       >
-        View Full Profile
+        Voir le profil complet
       </Link>
     </motion.div>
   );

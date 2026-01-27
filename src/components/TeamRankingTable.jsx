@@ -1,66 +1,63 @@
-import { motion } from "framer-motion";
+// Importation des modules nécessaires
+import React from "react"; // React
+import { motion } from "framer-motion"; // Pour les animations
 
-export default function TeamRankingTable({ teams }) {
+/**
+ * Tableau de classement des équipes NBA.
+ * Affiche le rang, le logo, le nom, les victoires, défaites et pourcentage.
+ * @param {Array} teams - Liste des équipes à afficher
+ */
+const TeamRankingTable = ({ teams }) => {
   return (
     <div className="overflow-x-auto">
-      <div className="min-w-full rounded-2xl overflow-hidden shadow-nba-lg">
-        {/* Header */}
-        <div className="grid grid-cols-12 gap-4 p-4 font-bold text-gray-900 bg-gradient-to-r from-yellow-400 to-yellow-500 sticky top-0 z-10">
-          <span className="col-span-1 text-center">Rank</span>
-          <span className="col-span-5">Team</span>
-          <span className="col-span-2 text-center">W</span>
-          <span className="col-span-2 text-center">L</span>
+      <div className="min-w-full divide-y divide-gray-200 rounded-2xl shadow-lg">
+        {/* En-tête du tableau */}
+        <div className="grid grid-cols-12 gap-4 p-4 font-bold text-gray-700 bg-gray-100 rounded-t-2xl">
+          <span className="col-span-1 text-center">Rang</span>
+          <span className="col-span-5">Équipe</span>
+          <span className="col-span-2 text-center">Victoires</span>
+          <span className="col-span-2 text-center">Défaites</span>
           <span className="col-span-2 text-center">%</span>
         </div>
 
-        {/* Rows */}
+        {/* Lignes du tableau pour chaque équipe */}
         {teams.map((team, index) => (
           <motion.div
             key={team.id}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.05 }}
-            whileHover={{ scale: 1.02, backgroundColor: "rgba(255, 255, 255, 0.05)" }}
-            className={`grid grid-cols-12 gap-4 p-4 items-center transition-all cursor-pointer
-              ${index % 2 === 0 ? "bg-white/5" : "bg-white/10"} 
-              border-b border-white/10 hover:border-yellow-400/30`}
+            whileHover={{ scale: 1.01 }}
+            className={`grid grid-cols-12 gap-4 p-4 items-center transition-colors rounded-b-xl cursor-pointer ${
+              index % 2 === 0 ? "bg-white" : "bg-gray-50"
+            }`}
           >
-            <div className="col-span-1 text-center">
-              <span className={`inline-block w-8 h-8 rounded-full font-bold text-sm flex items-center justify-center
-                ${index < 3 
-                  ? "bg-yellow-400 text-gray-900" 
-                  : "bg-white/20 text-white"
-                }`}>
-                {team.rank}
-              </span>
-            </div>
+            {/* Rang de l'équipe */}
+            <span className="col-span-1 text-center font-semibold text-lg">{team.rank}</span>
 
+            {/* Équipe avec logo */}
             <div className="col-span-5 flex items-center gap-3">
               <img
                 src={`${process.env.PUBLIC_URL}${team.logo_url}`}
                 alt={team.name}
-                className="w-12 h-12 object-contain hover:scale-110 transition-transform"
+                className="w-12 h-12 object-contain"
                 onError={(e) => {
                   e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`;
                 }}
               />
-              <span className="font-bold text-white group-hover:text-yellow-400 transition">{team.name}</span>
+              <span className="font-medium text-gray-900">{team.name}</span>
             </div>
 
-            <div className="col-span-2 text-center">
-              <span className="font-bold text-green-400">{team.wins}</span>
-            </div>
+            {/* Victoires */}
+            <span className="col-span-2 text-center font-semibold text-green-600">{team.wins}</span>
 
-            <div className="col-span-2 text-center">
-              <span className="font-bold text-red-400">{team.losses}</span>
-            </div>
+            {/* Défaites */}
+            <span className="col-span-2 text-center font-semibold text-red-600">{team.losses}</span>
 
-            <div className="col-span-2 text-center">
-              <span className="font-bold text-yellow-300">{team.percentage || team.win_percentage}%</span>
-            </div>
+            {/* Pourcentage de victoires */}
+            <span className="col-span-2 text-center font-semibold text-blue-600">{team.percentage}%</span>
           </motion.div>
         ))}
       </div>
     </div>
   );
-}
+};
+
+export default TeamRankingTable;

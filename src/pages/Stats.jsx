@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import LoadingSpinner from "../components/LoadingSpinner";
 import { getPlayers, getPlayerWithStats } from "../services/nbaApi";
 
 /**
@@ -107,27 +106,34 @@ export default function Stats() {
 
   if (loading) {
     return (
-      <div className="pt-20 px-4 min-h-screen bg-white flex items-center justify-center">
-        <LoadingSpinner />
+      <div className="pt-24 px-4 min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-xl font-semibold text-white">Chargement des statistiques...</p>
+        </motion.div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="pt-20 px-4 min-h-screen bg-white flex items-center justify-center">
+      <div className="pt-24 px-4 min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
         <motion.div
-          className="card text-center border-red-500 bg-red-50"
+          className="bg-white text-red-600 p-6 rounded-xl shadow-2xl max-w-md"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
         >
-          <h2 className="text-2xl font-bold mb-3 text-red-600">Error</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <h2 className="text-2xl font-bold mb-3">Erreur</h2>
+          <p className="mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="btn btn-primary"
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Retry
+            Réessayer
           </button>
         </motion.div>
       </div>
@@ -138,23 +144,35 @@ export default function Stats() {
   const currentCategory = categories.find((cat) => cat.key === selectedCategory);
 
   return (
-    <div className="pt-20 min-h-screen bg-white">
+    <div className="pt-16 min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white">
       {/* Header */}
       <motion.div
-        className="bg-gradient-to-r from-red-600 to-red-700 py-6 px-4 text-white border-b border-red-500"
+        className="bg-gray-800 border-b border-gray-700 py-6 px-4"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div className="max-w-6xl mx-auto">
+        <div className="container mx-auto max-w-7xl">
           <h1 className="text-4xl font-bold mb-2">STATS</h1>
-          <p className="text-red-100">Season Leaders • 2024-25</p>
+          <div className="flex gap-4 text-sm">
+          </div>
         </div>
       </motion.div>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Filters */}
+      <div className="container mx-auto max-w-7xl px-4 py-8">
+        {/* Section Title */}
         <motion.div
-          className="mb-8 bg-gray-50 rounded-lg p-4 border border-gray-200"
+          className="mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <h2 className="text-3xl font-bold mb-2">PLAYERS</h2>
+          <p className="text-gray-400">Season Leaders • 2024-25</p>
+        </motion.div>
+
+        {/* Filtres de catégories */}
+        <motion.div
+          className="mb-6 bg-gray-800 rounded-lg p-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}

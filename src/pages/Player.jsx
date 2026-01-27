@@ -1,9 +1,8 @@
 // Importation des hooks et composants nécessaires
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import LoadingSpinner from "../components/LoadingSpinner";
-import PlayerStatsChart from "../components/PlayerStatsChart";
-import { getPlayers, getPlayerWithStats } from "../services/nbaApi";
+import { useState, useEffect } from "react"; // Hooks React pour gérer l'état local et les effets
+import { motion } from "framer-motion"; // Pour les animations
+import PlayerStatsChart from "../components/PlayerStatsChart"; // Composant graphique des stats
+import { getPlayers, getPlayerWithStats } from "../services/nbaApi"; // Service API pour récupérer les joueurs
 
 /**
  * Page principale pour comparer les joueurs NBA.
@@ -106,8 +105,16 @@ export default function Player() {
   // Affichage pendant le chargement
   if (loading) {
     return (
-      <div className="pt-20 px-4 min-h-screen bg-white flex flex-col items-center justify-center">
-        <LoadingSpinner />
+      <div className="pt-24 px-4 sm:px-5 min-h-screen bg-gradient-to-b from-red-600 via-orange-400 to-yellow-300 text-white flex flex-col items-center justify-center">
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-xl font-semibold">Chargement des joueurs...</p>
+        </motion.div>
       </div>
     );
   }
@@ -115,20 +122,21 @@ export default function Player() {
   // Affichage en cas d'erreur
   if (error) {
     return (
-      <div className="pt-20 px-4 min-h-screen bg-white flex flex-col items-center justify-center">
+      <div className="pt-24 px-4 sm:px-5 min-h-screen bg-gradient-to-b from-red-600 via-orange-400 to-yellow-300 text-white flex flex-col items-center justify-center">
         <motion.div
-          className="card text-center border-red-500 bg-red-50 max-w-md"
+          className="bg-white text-red-600 p-6 rounded-xl shadow-2xl max-w-md"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-2xl font-bold mb-3 text-red-600">Error</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
+          <h2 className="text-2xl font-bold mb-3">Erreur</h2>
+          <p className="mb-4">{error}</p>
+          <p className="text-sm text-gray-600">Assurez-vous que l'API est lancée sur http://localhost:3001</p>
           <button
             onClick={() => window.location.reload()}
-            className="btn btn-primary"
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
           >
-            Retry
+            Réessayer
           </button>
         </motion.div>
       </div>

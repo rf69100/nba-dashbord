@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import LoadingSpinner from "../components/LoadingSpinner";
 import { getPlayerWithStats } from "../services/nbaApi";
 
 /**
@@ -61,27 +60,34 @@ export default function PlayerProfile() {
 
   if (loading) {
     return (
-      <div className="pt-20 px-4 min-h-screen bg-white flex items-center justify-center">
-        <LoadingSpinner />
+      <div className="pt-24 px-4 min-h-screen bg-gradient-to-b from-blue-900 via-blue-700 to-blue-500 flex items-center justify-center">
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-xl font-semibold text-white">Chargement du profil...</p>
+        </motion.div>
       </div>
     );
   }
 
   if (error || !player) {
     return (
-      <div className="pt-20 px-4 min-h-screen bg-white flex items-center justify-center">
+      <div className="pt-24 px-4 min-h-screen bg-gradient-to-b from-blue-900 via-blue-700 to-blue-500 flex items-center justify-center">
         <motion.div
-          className="card text-center border-red-500 bg-red-50 max-w-md"
+          className="bg-white text-red-600 p-6 rounded-xl shadow-2xl max-w-md"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
         >
-          <h2 className="text-2xl font-bold mb-3 text-red-600">Error</h2>
-          <p className="text-gray-600 mb-4">{error || 'Player not found'}</p>
+          <h2 className="text-2xl font-bold mb-3">Erreur</h2>
+          <p className="mb-4">{error || 'Joueur introuvable'}</p>
           <Link
             to="/player"
-            className="inline-block btn btn-primary"
+            className="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Back to Players
+            Retour aux joueurs
           </Link>
         </motion.div>
       </div>
@@ -89,7 +95,7 @@ export default function PlayerProfile() {
   }
 
   return (
-    <div className="pt-20 min-h-screen bg-white">
+    <div className="pt-16 min-h-screen bg-gradient-to-b from-blue-900 via-blue-700 to-blue-500">
       {/* Header avec photo et infos principales */}
       <motion.div
         className="relative bg-gradient-to-r from-blue-800 to-blue-600 text-white py-12 px-4"

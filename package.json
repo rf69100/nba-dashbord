@@ -1,5 +1,5 @@
 {
-  "name": "nba_dashboard",
+  "name": "nba-dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,10 +16,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "CI=false react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "bash -c 'HOST=0.0.0.0 PORT=3000 react-scripts start'",
+    "build": "bash -c 'react-scripts build'",
+    "test": "bash -c 'react-scripts test'",
+    "eject": "bash -c 'react-scripts eject'"
   },
   "eslintConfig": {
     "extends": [
