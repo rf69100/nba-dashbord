@@ -112,7 +112,7 @@ export default function PlayerProfile() {
                 alt={player.display_name}
                 className="w-64 h-64 object-cover rounded-lg border-4 border-white shadow-2xl"
                 onError={(e) => {
-                  e.target.src = 'https://via.placeholder.com/256x256/3B82F6/FFFFFF?text=No+Photo';
+                  e.target.src = '/api/placeholder/256/256';
                 }}
               />
               {player.team_logo_url && (
