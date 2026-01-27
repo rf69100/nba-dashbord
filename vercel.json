@@ -13,17 +13,21 @@
       }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "^/(?:.+/)?(?:index\\.html)?$",
-      "destination": "/index.html",
-      "status": 200
-    },
+      "source": "^/(?:.+/)?(?:index\\.html)?$",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
     {
-      "src": "/(.*)\\.(js|css|gif|ico|jpg|jpeg|jpg|png|svg|webp|woff|woff2|eot|otf|ttf)$",
-      "headers": {
-        "Cache-Control": "max-age=31536000, immutable"
-      }
+      "source": "/(.*)\\.(js|css|gif|ico|jpg|jpeg|jpg|png|svg|webp|woff|woff2|eot|otf|ttf)$",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "max-age=31536000, immutable"
+        }
+      ]
     }
   ]
 }
