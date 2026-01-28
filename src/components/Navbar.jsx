@@ -4,7 +4,7 @@ import { motion } from "framer-motion"; // Pour les animations
 
 /**
  * Barre de navigation principale de l'application.
- * Permet de naviguer entre les pages Home, Players et Teams.
+ * Permet de naviguer entre les pages Home, Players et Ranking.
  */
 export default function Navbar() {
   return (
@@ -20,7 +20,7 @@ export default function Navbar() {
       <div className="flex items-center space-x-6">
         <Link to="/" className="hover:text-yellow-400 transition">Home</Link>
         <Link to="/player" className="hover:text-yellow-400 transition">Players</Link>
-        <Link to="/teams" className="hover:text-yellow-400 transition">Teams</Link>
+        <Link to="/ranking" className="hover:text-yellow-400 transition">Ranking</Link>
         <Link to="/stats" className="hover:text-yellow-400 transition">Stats</Link>
       </div>
     </motion.nav>

@@ -22,7 +22,7 @@ export default function Home() {
       title: "🏀 Classement des équipes",
       desc: "Consulte le classement complet des équipes NBA et découvre les statistiques clés de chaque franchise.",
       color: "bg-orange-500 hover:bg-orange-600",
-      path: "/teams"
+      path: "/ranking"
     },
   ];
 
