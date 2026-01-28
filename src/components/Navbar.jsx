@@ -99,28 +99,28 @@ export default function Navbar() {
                   className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
-                  🏠 Home
+                  Home
                 </Link>
                 <Link 
                   to="/player" 
                   className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
-                  👤 Players
+                  Players
                 </Link>
                 <Link 
                   to="/ranking" 
                   className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
-                  📊 Ranking
+                  Ranking
                 </Link>
                 <Link 
                   to="/stats" 
                   className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
-                  📈 Stats
+                  Stats
                 </Link>
               </div>
             </motion.div>
