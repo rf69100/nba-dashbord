@@ -4,11 +4,11 @@ import { motion, AnimatePresence } from "framer-motion"; // Pour les animations
 import { useState } from "react"; // Pour gérer l'état du menu
 
 /**
- * Barre de navigation principale de l'application.
+ * Header principal de l'application (anciennement Navbar).
  * Permet de naviguer entre les pages Stats, Standings, Teams et Players.
  * Version responsive avec menu hamburger pour mobile.
  */
-export default function Navbar() {
+export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
