@@ -3,9 +3,11 @@ import React from "react";
 /**
  * Composant d'affichage du logo d'une équipe NBA.
  * Transforme le nom d'équipe en nom de fichier SVG et gère l'erreur si le logo n'existe pas.
+ * @param {number} teamId - ID de l'équipe (optionnel)
  * @param {string} teamName - Nom de l'équipe
+ * @param {string} className - Classes CSS supplémentaires (optionnel)
  */
-const TeamLogo = ({ teamName }) => {
+const TeamLogo = ({ teamId, teamName, className = "w-10 h-10 object-contain" }) => {
   // Transforme le nom de l'équipe en format minuscule avec tirets
   const fileName = teamName.toLowerCase().replace(/\s+/g, "-");
   const logoPath = `${process.env.PUBLIC_URL}/images/nba-logos/${fileName}.svg`;
@@ -14,7 +16,7 @@ const TeamLogo = ({ teamName }) => {
     <img
       src={logoPath}
       alt={`${teamName} logo`}
-      className="w-10 h-10 object-contain"
+      className={className}
       onError={(e) => { 
         e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`; 
       }}
