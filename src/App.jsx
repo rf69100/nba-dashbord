@@ -19,7 +19,7 @@ import TeamProfile from "./pages/TeamProfile"; // Page de profil équipe
 function App() {
   // Rendu principal de l'application avec le router et le header
   return (
-    <Router basename="/nba_dashboard">
+    <Router basename="/">
       <ScrollToTop />
       <div className="min-h-screen bg-gray-100 text-gray-900 transition-colors duration-500 flex flex-col">
         <Header />
