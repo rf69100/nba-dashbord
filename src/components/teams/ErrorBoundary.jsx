@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "../common/LoadingSpinner";
 
 export default function ErrorBoundary({ error, onRetry }) {
   return (
