@@ -1,6 +1,5 @@
 import { useParams, Link } from "react-router-dom";
 import usePlayerProfile from "../hooks/usePlayerProfile";
-import PageContainer from "../components/layout/PageContainer";
 import PageLoader from "../components/layout/PageLoader";
 import ErrorMessage from "../components/layout/ErrorMessage";
 import PlayerHeader from "../components/playerProfile/PlayerHeader";
