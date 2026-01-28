@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { getPlayerWithStats } from "../services/nbaApi";
+import { getPlayerWithStats, getTeams } from "../services/nbaApi";
 
 /**
  * Page de profil détaillé d'un joueur NBA
@@ -12,6 +12,7 @@ export default function PlayerProfile() {
   const [player, setPlayer] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [teamId, setTeamId] = useState(null);
 
   useEffect(() => {
     const fetchPlayerData = async () => {
@@ -20,6 +21,14 @@ export default function PlayerProfile() {
         setError(null);
         const playerData = await getPlayerWithStats(id);
         setPlayer(playerData);
+        
+        // Trouver l'ID de l'équipe du joueur
+        const allTeamsData = await getTeams();
+        const teamsList = Array.isArray(allTeamsData) ? allTeamsData : allTeamsData?.teams || [];
+        const team = teamsList.find(t => t.name === playerData.team_name || t.full_name === playerData.team_name);
+        if (team) {
+          setTeamId(team.id);
+        }
       } catch (err) {
         console.error('Erreur lors du chargement du joueur:', err);
         setError(err.message || 'Impossible de charger les données du joueur');
@@ -116,13 +125,18 @@ export default function PlayerProfile() {
                   e.target.src = `https://ui-avatars.com/api/?name=${name}&size=256&background=3B82F6&color=fff&bold=true`;
                 }}
               />
-              {player.team_logo_url && (
-                <img
-                  src={`${process.env.PUBLIC_URL}${player.team_logo_url}`}
-                  alt={player.team_name}
-                  className="absolute -bottom-4 -right-4 w-20 h-20 bg-white rounded-full p-2 shadow-xl"
-                  onError={(e) => { e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`; }}
-                />
+              {player.team_logo_url && teamId && (
+                <Link 
+                  to={`/team/${teamId}`}
+                  className="absolute -bottom-4 -right-4"
+                >
+                  <img
+                    src={`${process.env.PUBLIC_URL}${player.team_logo_url}`}
+                    alt={player.team_name}
+                    className="w-20 h-20 bg-white rounded-full p-2 shadow-xl hover:scale-110 transition-transform cursor-pointer"
+                    onError={(e) => { e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`; }}
+                  />
+                </Link>
               )}
             </div>
 

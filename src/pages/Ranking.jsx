@@ -1,5 +1,6 @@
 // Importation des modules nécessaires
 import React, { useState, useEffect } from "react"; // React et hooks d'état et d'effet
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion"; // Pour les animations
 import TeamRankingTable from "../components/TeamRankingTable"; // Tableau de classement
 import { getStandings } from "../services/nbaApi"; // Service API pour récupérer les standings
@@ -126,42 +127,48 @@ const Ranking = () => {
         {/* Version mobile simplifiée */}
         <div className="block sm:hidden">
           {filteredTeams.map((team, index) => (
-            <motion.div
-              key={team.name}
-              whileHover={{ scale: 1.02 }}
-              className={`mb-3 p-4 rounded-xl border border-gray-200 cursor-pointer transition-colors ${
-                index % 2 === 0 ? "bg-white" : "bg-gray-50"
-              }`}
+            <Link
+              key={team.id}
+              to={`/team/${team.id}`}
+              className="block"
+              aria-label={`Voir le profil de ${team.name}`}
             >
-              {/* Informations principales de l'équipe */}
-              <div className="flex items-center space-x-3">
-                <span className="text-lg font-bold text-gray-700">#{team.rank}</span>
-                <img
-                  src={`${process.env.PUBLIC_URL}${team.logo_url}`}
-                  alt={team.name}
-                  className="w-10 h-10 object-contain"
-                  onError={(e) => {
-                    e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`;
-                  }}
-                />
-                <span className="font-bold text-gray-900 text-sm">{team.name}</span>
-              </div>
-              {/* Statistiques de l'équipe */}
-              <div className="flex justify-between items-center mt-2">
-                <div className="text-center">
-                  <div className="text-xs text-gray-600">Victoires</div>
-                  <div className="font-semibold text-green-600">{team.wins}</div>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                className={`mb-3 p-4 rounded-xl border border-gray-200 cursor-pointer transition-colors ${
+                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                }`}
+              >
+                {/* Informations principales de l'équipe */}
+                <div className="flex items-center space-x-3">
+                  <span className="text-lg font-bold text-gray-700">#{team.rank}</span>
+                  <img
+                    src={`${process.env.PUBLIC_URL}${team.logo_url}`}
+                    alt={team.name}
+                    className="w-10 h-10 object-contain"
+                    onError={(e) => {
+                      e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`;
+                    }}
+                  />
+                  <span className="font-bold text-gray-900 text-sm">{team.name}</span>
                 </div>
-                <div className="text-center">
-                  <div className="text-xs text-gray-600">Défaites</div>
-                  <div className="font-semibold text-red-600">{team.losses}</div>
+                {/* Statistiques de l'équipe */}
+                <div className="flex justify-between items-center mt-2">
+                  <div className="text-center">
+                    <div className="text-xs text-gray-600">Victoires</div>
+                    <div className="font-semibold text-green-600">{team.wins}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xs text-gray-600">Défaites</div>
+                    <div className="font-semibold text-red-600">{team.losses}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-xs text-gray-600">%</div>
+                    <div className="font-semibold text-blue-600">{team.percentage}%</div>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <div className="text-xs text-gray-600">%</div>
-                  <div className="font-semibold text-blue-600">{team.percentage}%</div>
-                </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </Link>
           ))}
         </div>
 
