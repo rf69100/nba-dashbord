@@ -5,6 +5,7 @@ import {
 } from "recharts"; // Librairie pour les graphiques
 import { motion } from "framer-motion"; // Pour les animations
 import PlayerCard from "./PlayerCard"; // Carte individuelle du joueur
+import SearchBar from "./SearchBar"; // Barre de recherche réutilisable
 
 /**
  * Composant d'affichage et de comparaison des statistiques des joueurs sélectionnés.
@@ -17,10 +18,19 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
   // État local pour la barre de recherche
   const [search, setSearch] = useState("");
 
-  // Filtre les joueurs selon la recherche
-  const filteredPlayers = allPlayers.filter((p) =>
-    p.name.toLowerCase().startsWith(search.toLowerCase())
-  );
+  // Filtre les joueurs selon la recherche (nom, équipe ou position)
+  const normalizedSearch = search.trim().toLowerCase();
+  const filteredPlayers = allPlayers.filter((p) => {
+    if (!normalizedSearch) return false; // N'affiche rien si pas de recherche
+    const name = p.name?.toLowerCase() || "";
+    const team = p.team?.toLowerCase() || "";
+    const position = p.info?.position?.toLowerCase() || "";
+    return (
+      name.includes(normalizedSearch) ||
+      team.includes(normalizedSearch) ||
+      position.includes(normalizedSearch)
+    );
+  });
 
   // Nombre de matchs affichés
   const maxGames = 10;
@@ -73,23 +83,11 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
       )}
 
       {/* Barre de recherche pour filtrer les joueurs */}
-      <div className="relative mb-6">
-        <input
-          type="text"
-          placeholder="Rechercher un joueur par nom..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full px-4 py-3 border-2 border-blue-300 rounded-lg text-gray-900 focus:border-blue-500 focus:outline-none transition-colors"
-        />
-        {search && (
-          <button
-            onClick={() => setSearch("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 font-bold text-xl"
-          >
-            ✕
-          </button>
-        )}
-      </div>
+      <SearchBar
+        value={search}
+        onChange={setSearch}
+        placeholder="Rechercher un joueur par nom, équipe ou position..."
+      />
 
       {/* Affichage des résultats filtrés pour sélection rapide */}
       {search && filteredPlayers.length > 0 && (
@@ -97,7 +95,7 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
           <div className="text-sm text-gray-700 font-semibold mb-3">
             {filteredPlayers.length} résultat{filteredPlayers.length > 1 ? 's' : ''} trouvé{filteredPlayers.length > 1 ? 's' : ''}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredPlayers.map((p) => (
               <button
                 key={p.id}
@@ -105,13 +103,21 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
                   togglePlayer(p);
                   setSearch("");
                 }}
-                className="bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 font-semibold text-left flex items-center justify-between group transition-all duration-200 hover:scale-105 hover:shadow-lg"
+                className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-br from-orange-50 to-yellow-50 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] text-left"
               >
-                <div className="flex flex-col">
-                  <span className="font-bold">{p.name}</span>
-                  <span className="text-xs text-blue-200">{p.team} • {p.info.position}</span>
+                <img
+                  src={p.info?.photo}
+                  alt={p.name}
+                  className="w-16 h-16 rounded-full object-cover border-2 border-white shadow"
+                  onError={(e) => {
+                    const name = (p.name || "NBA").replace(" ", "+");
+                    e.target.src = `https://ui-avatars.com/api/?name=${name}&size=64&background=F97316&color=fff&bold=true`;
+                  }}
+                />
+                <div className="flex-1">
+                  <div className="font-bold text-gray-900">{p.name}</div>
+                  <div className="text-sm text-gray-600">{p.team} • {p.info.position}</div>
                 </div>
-                <span className="text-2xl opacity-0 group-hover:opacity-100 transition-opacity">+</span>
               </button>
             ))}
           </div>

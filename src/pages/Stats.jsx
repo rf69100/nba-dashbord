@@ -304,7 +304,7 @@ export default function Stats() {
           <h3 className="text-xl font-bold mb-2 text-blue-400">About These Stats</h3>
           <p className="text-gray-300">
             These statistics are calculated from the last 10 games played by each player during the 2024-25 NBA season.
-            Rankings are updated based on per-game averages across all statistical categories.
+            Standings are updated based on per-game averages across all statistical categories.
           </p>
         </motion.div>
       </div>

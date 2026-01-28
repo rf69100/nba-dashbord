@@ -454,7 +454,7 @@ export const players = [
     height_cm: 208,
     weight_kg: 95,
     position: "Forward/Center",
-    photo_url: "https://cdn.nba.com/headshots/nba/latest/1040x760/2544.png",
+    photo_url: "https://cdn.nba.com/headshots/nba/latest/1040x760/1631096.png",
     lastGames: [
       { PTS: 22, REB: 9, AST: 3, STL: 1, BLK: 3, FG: 8, FGA: 15, "3P": 3, "3PA": 7, FT: 3, FTA: 3 },
       { PTS: 26, REB: 10, AST: 4, STL: 2, BLK: 2, FG: 10, FGA: 17, "3P": 4, "3PA": 8, FT: 2, FTA: 2 },
@@ -484,7 +484,7 @@ export const players = [
     height_cm: 206,
     weight_kg: 109,
     position: "Center",
-    photo_url: "https://cdn.nba.com/headshots/nba/latest/1040x760/201939.png",
+    photo_url: "https://cdn.nba.com/headshots/nba/latest/1040x760/1628389.png",
     lastGames: [
       { PTS: 18, REB: 12, AST: 4, STL: 1, BLK: 2, FG: 8, FGA: 14, "3P": 0, "3PA": 1, FT: 2, FTA: 3 },
       { PTS: 20, REB: 10, AST: 5, STL: 2, BLK: 3, FG: 9, FGA: 16, "3P": 0, "3PA": 1, FT: 2, FTA: 3 },
@@ -514,7 +514,7 @@ export const players = [
     height_cm: 191,
     weight_kg: 84,
     position: "Guard",
-    photo_url: "https://cdn.nba.com/headshots/nba/latest/1040x760/203507.png",
+    photo_url: "https://cdn.nba.com/headshots/nba/latest/1040x760/1628378.png",
     lastGames: [
       { PTS: 28, REB: 4, AST: 6, STL: 1, BLK: 0, FG: 11, FGA: 20, "3P": 4, "3PA": 9, FT: 2, FTA: 2 },
       { PTS: 32, REB: 5, AST: 7, STL: 2, BLK: 0, FG: 12, FGA: 22, "3P": 5, "3PA": 10, FT: 3, FTA: 3 },
@@ -544,7 +544,7 @@ export const players = [
     height_cm: 198,
     weight_kg: 129,
     position: "Forward",
-    photo_url: "https://cdn.nba.com/headshots/nba/latest/1040x760/201142.png",
+    photo_url: "https://cdn.nba.com/headshots/nba/latest/1040x760/1629627.png",
     lastGames: [
       { PTS: 26, REB: 12, AST: 3, STL: 1, BLK: 2, FG: 10, FGA: 18, "3P": 0, "3PA": 1, FT: 6, FTA: 8 },
       { PTS: 30, REB: 14, AST: 4, STL: 2, BLK: 1, FG: 12, FGA: 20, "3P": 0, "3PA": 1, FT: 6, FTA: 7 },
@@ -664,7 +664,7 @@ export const players = [
     height_cm: 183,
     weight_kg: 79,
     position: "Guard",
-    photo_url: "https://cdn.nba.com/headshots/nba/latest/1040x760/1629029.png",
+    photo_url: "https://cdn.nba.com/headshots/nba/latest/1040x760/101108.png",
     lastGames: [
       { PTS: 18, REB: 3, AST: 9, STL: 1, BLK: 0, FG: 7, FGA: 14, "3P": 2, "3PA": 5, FT: 2, FTA: 2 },
       { PTS: 20, REB: 4, AST: 11, STL: 2, BLK: 0, FG: 8, FGA: 15, "3P": 3, "3PA": 6, FT: 2, FTA: 2 },
