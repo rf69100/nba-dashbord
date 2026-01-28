@@ -34,6 +34,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center space-x-6">
           <Link to="/" className="hover:text-yellow-400 transition">Home</Link>
           <Link to="/player" className="hover:text-yellow-400 transition">Players</Link>
+          <Link to="/teams" className="hover:text-yellow-400 transition">Teams</Link>
           <Link to="/ranking" className="hover:text-yellow-400 transition">Ranking</Link>
           <Link to="/stats" className="hover:text-yellow-400 transition">Stats</Link>
         </div>
@@ -107,6 +108,13 @@ export default function Navbar() {
                   onClick={closeMenu}
                 >
                   Players
+                </Link>
+                <Link 
+                  to="/teams" 
+                  className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
+                  onClick={closeMenu}
+                >
+                  Teams
                 </Link>
                 <Link 
                   to="/ranking" 

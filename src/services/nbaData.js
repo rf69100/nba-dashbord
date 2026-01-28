@@ -5,45 +5,45 @@
 
 export const teams = [
   // Eastern Conference (2024-2025)
-  { id: 1, name: "Boston Celtics", wins: 64, losses: 18, conference: "East", logo_url: "/images/nba-logos/boston-celtics.svg" },
-  { id: 2, name: "New York Knicks", wins: 50, losses: 32, conference: "East", logo_url: "/images/nba-logos/new-york-knicks.svg" },
-  { id: 3, name: "Milwaukee Bucks", wins: 49, losses: 33, conference: "East", logo_url: "/images/nba-logos/milwaukee-bucks.svg" },
-  { id: 4, name: "Cleveland Cavaliers", wins: 48, losses: 34, conference: "East", logo_url: "/images/nba-logos/cleveland-cavaliers.svg" },
-  { id: 5, name: "Orlando Magic", wins: 47, losses: 35, conference: "East", logo_url: "/images/nba-logos/orlando-magic.svg" },
-  { id: 6, name: "Indiana Pacers", wins: 47, losses: 35, conference: "East", logo_url: "/images/nba-logos/indiana-pacers.svg" },
-  { id: 7, name: "Philadelphia 76ers", wins: 47, losses: 35, conference: "East", logo_url: "/images/nba-logos/philadelphia-76ers.svg" },
-  { id: 8, name: "Miami Heat", wins: 46, losses: 36, conference: "East", logo_url: "/images/nba-logos/miami-heat.svg" },
-  { id: 9, name: "Chicago Bulls", wins: 39, losses: 43, conference: "East", logo_url: "/images/nba-logos/chicago-bulls.svg" },
-  { id: 10, name: "Atlanta Hawks", wins: 36, losses: 46, conference: "East", logo_url: "/images/nba-logos/atlanta-hawks.svg" },
-  { id: 11, name: "Brooklyn Nets", wins: 32, losses: 50, conference: "East", logo_url: "/images/nba-logos/brooklyn-nets.svg" },
-  { id: 12, name: "Toronto Raptors", wins: 25, losses: 57, conference: "East", logo_url: "/images/nba-logos/toronto-raptors.svg" },
-  { id: 13, name: "Charlotte Hornets", wins: 21, losses: 61, conference: "East", logo_url: "/images/nba-logos/charlotte-hornets.svg" },
-  { id: 14, name: "Detroit Pistons", wins: 14, losses: 68, conference: "East", logo_url: "/images/nba-logos/detroit-pistons.svg" },
-  { id: 15, name: "Washington Wizards", wins: 15, losses: 67, conference: "East", logo_url: "/images/nba-logos/washington-wizards.svg" },
+  { id: 1, name: "Boston Celtics", wins: 64, losses: 18, conference: "East", division: "Atlantic", logo_url: "/images/nba-logos/boston-celtics.svg" },
+  { id: 2, name: "New York Knicks", wins: 50, losses: 32, conference: "East", division: "Atlantic", logo_url: "/images/nba-logos/new-york-knicks.svg" },
+  { id: 3, name: "Milwaukee Bucks", wins: 49, losses: 33, conference: "East", division: "Central", logo_url: "/images/nba-logos/milwaukee-bucks.svg" },
+  { id: 4, name: "Cleveland Cavaliers", wins: 48, losses: 34, conference: "East", division: "Central", logo_url: "/images/nba-logos/cleveland-cavaliers.svg" },
+  { id: 5, name: "Orlando Magic", wins: 47, losses: 35, conference: "East", division: "Southeast", logo_url: "/images/nba-logos/orlando-magic.svg" },
+  { id: 6, name: "Indiana Pacers", wins: 47, losses: 35, conference: "East", division: "Central", logo_url: "/images/nba-logos/indiana-pacers.svg" },
+  { id: 7, name: "Philadelphia 76ers", wins: 47, losses: 35, conference: "East", division: "Atlantic", logo_url: "/images/nba-logos/philadelphia-76ers.svg" },
+  { id: 8, name: "Miami Heat", wins: 46, losses: 36, conference: "East", division: "Southeast", logo_url: "/images/nba-logos/miami-heat.svg" },
+  { id: 9, name: "Chicago Bulls", wins: 39, losses: 43, conference: "East", division: "Central", logo_url: "/images/nba-logos/chicago-bulls.svg" },
+  { id: 10, name: "Atlanta Hawks", wins: 36, losses: 46, conference: "East", division: "Southeast", logo_url: "/images/nba-logos/atlanta-hawks.svg" },
+  { id: 11, name: "Brooklyn Nets", wins: 32, losses: 50, conference: "East", division: "Atlantic", logo_url: "/images/nba-logos/brooklyn-nets.svg" },
+  { id: 12, name: "Toronto Raptors", wins: 25, losses: 57, conference: "East", division: "Atlantic", logo_url: "/images/nba-logos/toronto-raptors.svg" },
+  { id: 13, name: "Charlotte Hornets", wins: 21, losses: 61, conference: "East", division: "Southeast", logo_url: "/images/nba-logos/charlotte-hornets.svg" },
+  { id: 14, name: "Detroit Pistons", wins: 14, losses: 68, conference: "East", division: "Central", logo_url: "/images/nba-logos/detroit-pistons.svg" },
+  { id: 15, name: "Washington Wizards", wins: 15, losses: 67, conference: "East", division: "Southeast", logo_url: "/images/nba-logos/washington-wizards.svg" },
 
   // Western Conference (2024-2025)
-  { id: 16, name: "Oklahoma City Thunder", wins: 57, losses: 25, conference: "West", logo_url: "/images/nba-logos/oklahoma-city-thunder.svg" },
-  { id: 17, name: "Denver Nuggets", wins: 57, losses: 25, conference: "West", logo_url: "/images/nba-logos/denver-nuggets.svg" },
-  { id: 18, name: "Minnesota Timberwolves", wins: 56, losses: 26, conference: "West", logo_url: "/images/nba-logos/minnesota-timberwolves.svg" },
-  { id: 19, name: "Los Angeles Clippers", wins: 51, losses: 31, conference: "West", logo_url: "/images/nba-logos/los-angeles-clippers.svg" },
-  { id: 20, name: "Dallas Mavericks", wins: 50, losses: 32, conference: "West", logo_url: "/images/nba-logos/dallas-mavericks.svg" },
-  { id: 21, name: "Phoenix Suns", wins: 49, losses: 33, conference: "West", logo_url: "/images/nba-logos/phoenix-suns.svg" },
-  { id: 22, name: "New Orleans Pelicans", wins: 49, losses: 33, conference: "West", logo_url: "/images/nba-logos/new-orleans-pelicans.svg" },
-  { id: 23, name: "Los Angeles Lakers", wins: 47, losses: 35, conference: "West", logo_url: "/images/nba-logos/los-angeles-lakers.svg" },
-  { id: 24, name: "Sacramento Kings", wins: 46, losses: 36, conference: "West", logo_url: "/images/nba-logos/sacramento-kings.svg" },
-  { id: 25, name: "Golden State Warriors", wins: 46, losses: 36, conference: "West", logo_url: "/images/nba-logos/golden-state-warriors.svg" },
-  { id: 26, name: "Houston Rockets", wins: 41, losses: 41, conference: "West", logo_url: "/images/nba-logos/houston-rockets.svg" },
-  { id: 27, name: "Utah Jazz", wins: 31, losses: 51, conference: "West", logo_url: "/images/nba-logos/utah-jazz.svg" },
-  { id: 28, name: "Memphis Grizzlies", wins: 27, losses: 55, conference: "West", logo_url: "/images/nba-logos/memphis-grizzlies.svg" },
-  { id: 29, name: "Portland Trail Blazers", wins: 21, losses: 61, conference: "West", logo_url: "/images/nba-logos/portland-trail-blazers.svg" },
-  { id: 30, name: "San Antonio Spurs", wins: 22, losses: 60, conference: "West", logo_url: "/images/nba-logos/san-antonio-spurs.svg" },
+  { id: 16, name: "Oklahoma City Thunder", wins: 57, losses: 25, conference: "West", division: "Northwest", logo_url: "/images/nba-logos/oklahoma-city-thunder.svg" },
+  { id: 17, name: "Denver Nuggets", wins: 57, losses: 25, conference: "West", division: "Northwest", logo_url: "/images/nba-logos/denver-nuggets.svg" },
+  { id: 18, name: "Minnesota Timberwolves", wins: 56, losses: 26, conference: "West", division: "Northwest", logo_url: "/images/nba-logos/minnesota-timberwolves.svg" },
+  { id: 19, name: "Los Angeles Clippers", wins: 51, losses: 31, conference: "West", division: "Pacific", logo_url: "/images/nba-logos/los-angeles-clippers.svg" },
+  { id: 20, name: "Dallas Mavericks", wins: 50, losses: 32, conference: "West", division: "Southwest", logo_url: "/images/nba-logos/dallas-mavericks.svg" },
+  { id: 21, name: "Phoenix Suns", wins: 49, losses: 33, conference: "West", division: "Pacific", logo_url: "/images/nba-logos/phoenix-suns.svg" },
+  { id: 22, name: "New Orleans Pelicans", wins: 49, losses: 33, conference: "West", division: "Southwest", logo_url: "/images/nba-logos/new-orleans-pelicans.svg" },
+  { id: 23, name: "Los Angeles Lakers", wins: 47, losses: 35, conference: "West", division: "Pacific", logo_url: "/images/nba-logos/los-angeles-lakers.svg" },
+  { id: 24, name: "Sacramento Kings", wins: 46, losses: 36, conference: "West", division: "Pacific", logo_url: "/images/nba-logos/sacramento-kings.svg" },
+  { id: 25, name: "Golden State Warriors", wins: 46, losses: 36, conference: "West", division: "Pacific", logo_url: "/images/nba-logos/golden-state-warriors.svg" },
+  { id: 26, name: "Houston Rockets", wins: 41, losses: 41, conference: "West", division: "Southwest", logo_url: "/images/nba-logos/houston-rockets.svg" },
+  { id: 27, name: "Utah Jazz", wins: 31, losses: 51, conference: "West", division: "Northwest", logo_url: "/images/nba-logos/utah-jazz.svg" },
+  { id: 28, name: "Memphis Grizzlies", wins: 27, losses: 55, conference: "West", division: "Southwest", logo_url: "/images/nba-logos/memphis-grizzlies.svg" },
+  { id: 29, name: "Portland Trail Blazers", wins: 21, losses: 61, conference: "West", division: "Northwest", logo_url: "/images/nba-logos/portland-trail-blazers.svg" },
+  { id: 30, name: "San Antonio Spurs", wins: 22, losses: 60, conference: "West", division: "Southwest", logo_url: "/images/nba-logos/san-antonio-spurs.svg" },
 ];
 
 // Fonction pour calculer le win_percentage et ajouter aux équipes
 export const getTeamsWithStats = () => {
   return teams.map(team => ({
     ...team,
-    win_percentage: ((team.wins / (team.wins + team.losses)) * 100).toFixed(1)
+    win_percentage: (team.wins / (team.wins + team.losses)).toFixed(3)
   }));
 };
 

@@ -52,7 +52,7 @@ const TeamRankingTable = ({ teams }) => {
             <span className="col-span-2 text-center font-semibold text-red-600">{team.losses}</span>
 
             {/* Pourcentage de victoires */}
-            <span className="col-span-2 text-center font-semibold text-blue-600">{team.percentage}%</span>
+            <span className="col-span-2 text-center font-semibold text-blue-600">{(team.percentage * 100).toFixed(1)}%</span>
           </motion.div>
         ))}
       </div>

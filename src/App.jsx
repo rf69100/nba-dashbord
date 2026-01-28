@@ -6,6 +6,8 @@ import Player from "./pages/Player"; // Page de comparaison joueurs
 import PlayerProfile from "./pages/PlayerProfile"; // Page de profil joueur
 import Ranking from "./pages/Ranking"; // Page classement équipes (renommée en Ranking)
 import Stats from "./pages/Stats"; // Page des statistiques
+import Teams from "./pages/Teams"; // Page des équipes
+import TeamProfile from "./pages/TeamProfile"; // Page de profil équipe
 
 /**
  * Composant racine de l'application NBA Dashboard.
@@ -24,6 +26,10 @@ function App() {
           <Route path="/player" element={<Player />} />
           {/* Route vers le profil d'un joueur */}
           <Route path="/player/:id" element={<PlayerProfile />} />
+          {/* Route vers la page des équipes */}
+          <Route path="/teams" element={<Teams />} />
+          {/* Route vers le profil d'une équipe */}
+          <Route path="/team/:id" element={<TeamProfile />} />
           {/* Route vers la page du classement des équipes */}
           <Route path="/ranking" element={<Ranking />} />
           {/* Route vers la page des statistiques */}
