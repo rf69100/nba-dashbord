@@ -308,7 +308,7 @@ export default function PlayerProfile() {
             to="/player"
             className="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition-all duration-300 hover:scale-105"
           >
-            ← Back to Players
+            ← Retour aux joueurs
           </Link>
         </div>
       </div>

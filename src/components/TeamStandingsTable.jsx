@@ -8,7 +8,7 @@ import { motion } from "framer-motion"; // Pour les animations
  * Affiche le rang, le logo, le nom, les victoires, défaites et pourcentage.
  * @param {Array} teams - Liste des équipes à afficher
  */
-const TeamRankingTable = ({ teams }) => {
+const TeamStandingsTable = ({ teams }) => {
   return (
     <div className="overflow-x-auto">
       <div className="min-w-full divide-y divide-gray-200 rounded-2xl shadow-lg">
@@ -67,4 +67,4 @@ const TeamRankingTable = ({ teams }) => {
   );
 };
 
-export default TeamRankingTable;
+export default TeamStandingsTable;

@@ -13,16 +13,22 @@ export default function Home() {
   // Liste des fonctionnalités principales à afficher sur la page d'accueil
   const features = [
     {
-      title: "📊 Comparer les joueurs",
-      desc: "Sélectionne tes joueurs préférés et compare leurs performances sur les 10 derniers matchs grâce à nos graphiques interactifs.",
+      title: "🔎 Rechercher des joueurs",
+      desc: "Trouve un joueur rapidement et accède à sa fiche détaillée.",
       color: "bg-red-500 hover:bg-red-600",
       path: "/player"
     },
     {
+      title: "📊 Comparer les joueurs",
+      desc: "Sélectionne tes joueurs préférés et compare leurs performances sur les 10 derniers matchs grâce à nos graphiques interactifs.",
+      color: "bg-orange-500 hover:bg-orange-600",
+      path: "/comparison"
+    },
+    {
       title: "🏀 Classement des équipes",
       desc: "Consulte le classement complet des équipes NBA et découvre les statistiques clés de chaque franchise.",
-      color: "bg-orange-500 hover:bg-orange-600",
-      path: "/ranking"
+      color: "bg-yellow-400 hover:bg-yellow-500",
+      path: "/standings"
     },
   ];
 

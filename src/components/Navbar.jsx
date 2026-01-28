@@ -5,7 +5,7 @@ import { useState } from "react"; // Pour gérer l'état du menu
 
 /**
  * Barre de navigation principale de l'application.
- * Permet de naviguer entre les pages Home, Players et Ranking.
+ * Permet de naviguer entre les pages Stats, Standings, Teams et Players.
  * Version responsive avec menu hamburger pour mobile.
  */
 export default function Navbar() {
@@ -28,15 +28,17 @@ export default function Navbar() {
         className="fixed top-0 left-0 w-full z-50 flex justify-between items-center p-4 bg-gray-900 text-white shadow-lg"
       >
         {/* Titre/logo de la navbar */}
-        <h1 className="text-xl font-bold">🏀 NBA Dashboard</h1>
+        <Link to="/" className="text-xl font-bold hover:text-yellow-400 transition">
+          🏀 NBA Dashboard
+        </Link>
         
         {/* Liens de navigation - Desktop */}
         <div className="hidden md:flex items-center space-x-6">
-          <Link to="/" className="hover:text-yellow-400 transition">Home</Link>
-          <Link to="/player" className="hover:text-yellow-400 transition">Players</Link>
-          <Link to="/teams" className="hover:text-yellow-400 transition">Teams</Link>
-          <Link to="/ranking" className="hover:text-yellow-400 transition">Ranking</Link>
           <Link to="/stats" className="hover:text-yellow-400 transition">Stats</Link>
+          <Link to="/standings" className="hover:text-yellow-400 transition">Standings</Link>
+          <Link to="/teams" className="hover:text-yellow-400 transition">Teams</Link>
+          <Link to="/player" className="hover:text-yellow-400 transition">Players</Link>
+          <Link to="/comparison" className="hover:text-yellow-400 transition">Comparison</Link>
         </div>
 
         {/* Bouton hamburger - Mobile */}
@@ -96,18 +98,18 @@ export default function Navbar() {
               {/* Liens de navigation mobile */}
               <div className="flex flex-col p-4 space-y-4">
                 <Link 
-                  to="/" 
+                  to="/stats" 
                   className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
-                  Home
+                  Stats
                 </Link>
                 <Link 
-                  to="/player" 
+                  to="/standings" 
                   className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
-                  Players
+                  Standings
                 </Link>
                 <Link 
                   to="/teams" 
@@ -117,18 +119,18 @@ export default function Navbar() {
                   Teams
                 </Link>
                 <Link 
-                  to="/ranking" 
+                  to="/player" 
                   className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
-                  Ranking
+                  Players
                 </Link>
                 <Link 
-                  to="/stats" 
+                  to="/comparison" 
                   className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
-                  Stats
+                  Comparison
                 </Link>
               </div>
             </motion.div>

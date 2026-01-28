@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react"; // React et hooks d'état et d'effet
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion"; // Pour les animations
-import TeamRankingTable from "../components/TeamRankingTable"; // Tableau de classement
+import TeamStandingsTable from "../components/TeamStandingsTable"; // Tableau de classement
 import { getStandings } from "../services/nbaApi"; // Service API pour récupérer les standings
 
-const Ranking = () => {
+const Standings = () => {
   // États pour gérer la conférence sélectionnée, les données, le chargement et les erreurs
   const [conference, setConference] = useState("All");
   const [teams, setTeams] = useState([]);
@@ -174,7 +174,7 @@ const Ranking = () => {
 
         {/* Version desktop - tableau complet */}
         <div className="hidden sm:block">
-          <TeamRankingTable teams={filteredTeams} />
+          <TeamStandingsTable teams={filteredTeams} />
         </div>
       </motion.div>
 
@@ -191,4 +191,4 @@ const Ranking = () => {
   );
 };
 
-export default Ranking;
+export default Standings;
