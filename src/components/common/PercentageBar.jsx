@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion';
-
 /**
  * Composant pour afficher une barre de pourcentage
  */

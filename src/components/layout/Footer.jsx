@@ -111,14 +111,14 @@ export default function Footer() {
           </p>
           <div className="flex gap-4 mt-4 md:mt-0">
             <a
-              href="#"
+              href="https://twitter.com" target="_blank" rel="noopener noreferrer"
               className="hover:text-white transition-colors"
               aria-label="Twitter"
             >
               Twitter
             </a>
             <a
-              href="#"
+              href="https://github.com/rf69100/nba-dashbord" target="_blank" rel="noopener noreferrer"
               className="hover:text-white transition-colors"
               aria-label="GitHub"
             >
