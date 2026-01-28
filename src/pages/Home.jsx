@@ -36,25 +36,25 @@ export default function Home() {
   // Liste des fonctionnalités principales à afficher sur la page d'accueil
   const features = [
     {
-      title: "🔎 Rechercher des joueurs",
+      title: "Rechercher des joueurs",
       desc: "Trouve un joueur rapidement et accède à sa fiche détaillée avec toutes les statistiques.",
       gradient: "from-red-500 to-red-600",
       path: "/player"
     },
     {
-      title: "📊 Comparer les joueurs",
+      title: "Comparer les joueurs",
       desc: "Sélectionne tes joueurs et compare leurs performances avec des graphiques interactifs.",
       gradient: "from-orange-500 to-orange-600",
       path: "/comparison"
     },
     {
-      title: "🏆 Classement des équipes",
+      title: "Classement des Équipes",
       desc: "Découvre le classement complet et les statistiques de chaque franchise NBA.",
       gradient: "from-yellow-400 to-yellow-500",
       path: "/standings"
     },
     {
-      title: "👥 Explorer les équipes",
+      title: "Explorer les équipes",
       desc: "Navigue parmi les 30 équipes NBA et consulte leurs rosters complets.",
       gradient: "from-orange-400 to-orange-500",
       path: "/teams"
@@ -63,9 +63,9 @@ export default function Home() {
 
   // Stats à afficher
   const statsDisplay = [
-    { label: "Joueurs", value: stats.players, icon: "👤" },
-    { label: "Équipes", value: stats.teams, icon: "🏢" },
-    { label: "Saison", value: "2025-26", icon: "📅" }
+    { label: "Joueurs", value: stats.players },
+    { label: "Équipes", value: stats.teams },
+    { label: "Saison", value: "2025-26" }
   ];
 
   // Variantes d'animations
@@ -138,7 +138,7 @@ export default function Home() {
         >
           <span>Bienvenue sur</span>
           <br />
-          <span className="text-yellow-300">NBA Dashboard 🏀</span>
+          <span className="text-yellow-300">NBA Dashboard</span>
         </motion.h1>
 
         {/* Sous-titre */}
@@ -165,7 +165,6 @@ export default function Home() {
               variants={itemVariants}
               whileHover={{ scale: 1.05, y: -5 }}
             >
-              <div className="text-3xl mb-2">{stat.icon}</div>
               <div className="text-2xl sm:text-3xl font-bold mb-1">{stat.value}</div>
               <div className="text-sm sm:text-base text-white/90">{stat.label}</div>
             </motion.div>
@@ -253,7 +252,7 @@ export default function Home() {
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/player")}
             >
-              🔎 Chercher un Joueur
+              Chercher un Joueur
             </motion.button>
             <motion.button
               className="bg-red-600 text-white font-bold px-8 py-4 rounded-full hover:bg-red-700 transition-all duration-300 shadow-xl text-lg"
@@ -262,7 +261,7 @@ export default function Home() {
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/standings")}
             >
-              🏆 Voir le Classement
+              Voir le Classement
             </motion.button>
           </motion.div>
         </div>
@@ -276,7 +275,7 @@ export default function Home() {
         transition={{ delay: 1.5, duration: 0.8 }}
       >
         <p className="text-white/80 text-sm sm:text-base mb-2">
-          🏀 NBA Dashboard - Saison 2025-2026
+          NBA Dashboard - Saison 2025-2026
         </p>
         <p className="text-white/70 text-xs sm:text-sm">
           Statistiques mises à jour en temps réel pour vivre l'expérience du vrai terrain !
