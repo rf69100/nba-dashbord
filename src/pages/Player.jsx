@@ -10,9 +10,16 @@ import SearchBar from "../components/SearchBar";
 export default function Player() {
   const [players, setPlayers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterTeam, setFilterTeam] = useState("");
+  const [filterPosition, setFilterPosition] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openTeamDropdown, setOpenTeamDropdown] = useState(false);
 
+  // Positions disponibles
+  const POSITIONS = ["Center", "Forward", "Guard"];
+
+  // Extraire les équipes uniques
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
@@ -31,17 +38,39 @@ export default function Player() {
     fetchPlayers();
   }, []);
 
+  const uniqueTeams = [...new Set(players.map(p => p.team_name))].sort();
+
   const normalizedSearch = searchTerm.trim().toLowerCase();
   const filteredPlayers = players.filter((player) => {
-    if (!normalizedSearch) return true;
-    const name = player.display_name?.toLowerCase() || "";
-    const team = player.team_name?.toLowerCase() || "";
-    const position = player.position?.toLowerCase() || "";
-    return (
-      name.includes(normalizedSearch) ||
-      team.includes(normalizedSearch) ||
-      position.includes(normalizedSearch)
-    );
+    // Filtre par recherche
+    if (normalizedSearch) {
+      const name = player.display_name?.toLowerCase() || "";
+      const team = player.team_name?.toLowerCase() || "";
+      const position = player.position?.toLowerCase() || "";
+      const matchSearch = (
+        name.includes(normalizedSearch) ||
+        team.includes(normalizedSearch) ||
+        position.includes(normalizedSearch)
+      );
+      if (!matchSearch) return false;
+    }
+
+    // Filtre par équipe
+    if (filterTeam && player.team_name !== filterTeam) {
+      return false;
+    }
+
+    // Filtre par position
+    if (filterPosition) {
+      // Vérifier si le poste du joueur contient la position filtrée
+      const playerPositionLower = player.position?.toLowerCase() || "";
+      const filterPositionLower = filterPosition.toLowerCase();
+      if (!playerPositionLower.includes(filterPositionLower)) {
+        return false;
+      }
+    }
+
+    return true;
   });
 
   if (loading) {
@@ -99,6 +128,82 @@ export default function Player() {
             placeholder="Nom, équipe ou position..."
             label="Rechercher un joueur"
           />
+
+          {/* Filtre par équipe */}
+          <div className="mb-6 relative">
+            <label className="block text-xs font-semibold text-gray-700 mb-2">
+              Filtrer par équipe
+            </label>
+            <div className="relative">
+              <button
+                onClick={() => setOpenTeamDropdown(!openTeamDropdown)}
+                className="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-400 bg-white text-left flex justify-between items-center"
+              >
+                <span>{filterTeam || "Toutes les équipes"}</span>
+                <span className={`transition-transform ${openTeamDropdown ? "rotate-180" : ""}`}>
+                  ▼
+                </span>
+              </button>
+              
+              {openTeamDropdown && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-56 overflow-y-auto">
+                  <div
+                    className="px-3 py-1.5 text-sm text-gray-900 hover:bg-red-50 cursor-pointer"
+                    onClick={() => {
+                      setFilterTeam("");
+                      setOpenTeamDropdown(false);
+                    }}
+                  >
+                    Toutes les équipes
+                  </div>
+                  {uniqueTeams.map((team) => (
+                    <div
+                      key={team}
+                      className="px-3 py-1.5 text-sm text-gray-900 hover:bg-red-50 cursor-pointer"
+                      onClick={() => {
+                        setFilterTeam(team);
+                        setOpenTeamDropdown(false);
+                      }}
+                    >
+                      {team}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Filtre par position */}
+          <div className="mb-6">
+            <label className="block text-xs font-semibold text-gray-700 mb-2">
+              Filtrer par poste
+            </label>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setFilterPosition("")}
+                className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${
+                  filterPosition === ""
+                    ? "bg-red-600 text-white"
+                    : "bg-gray-200 text-gray-900 hover:bg-gray-300"
+                }`}
+              >
+                Tous
+              </button>
+              {POSITIONS.map((position) => (
+                <button
+                  key={position}
+                  onClick={() => setFilterPosition(position)}
+                  className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${
+                    filterPosition === position
+                      ? "bg-red-600 text-white"
+                      : "bg-gray-200 text-gray-900 hover:bg-gray-300"
+                  }`}
+                >
+                  {position}
+                </button>
+              ))}
+            </div>
+          </div>
 
           {filteredPlayers.length === 0 ? (
             <div className="text-center py-12 text-gray-600">
