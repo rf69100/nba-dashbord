@@ -14,7 +14,7 @@ import Stats from "./pages/Stats"; // Page des statistiques
 function App() {
   // Rendu principal de l'application avec le router et la navbar
   return (
-    <Router basename="/nba_dashboard">
+    <Router basename="/">
       <div className="min-h-screen bg-gray-100 text-gray-900 transition-colors duration-500">
         <Navbar />
         <Routes>
