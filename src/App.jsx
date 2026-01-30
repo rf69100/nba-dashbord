@@ -14,6 +14,8 @@ import TeamProfile from "./pages/TeamProfile"; // Page de profil équipe
 import About from "./pages/About"; // Page À Propos
 import Season from "./pages/Season"; // Page Saison 2024-25
 import OfficialStats from "./pages/OfficialStats"; // Page Statistiques Officielles
+import Quiz from "./pages/Quiz"; // Page Quiz NBA
+import QuizGame from "./pages/QuizGame"; // Page de jeu Quiz
 
 /**
  * Composant racine de l'application NBA Dashboard.
@@ -50,6 +52,10 @@ function App() {
             <Route path="/season" element={<Season />} />
             {/* Route vers la page Statistiques Officielles */}
             <Route path="/official-stats" element={<OfficialStats />} />
+            {/* Route vers la page Quiz NBA */}
+            <Route path="/quiz" element={<Quiz />} />
+            {/* Route vers un quiz spécifique */}
+            <Route path="/quiz/:categoryId" element={<QuizGame />} />
           </Routes>
         </main>
         <Footer />
