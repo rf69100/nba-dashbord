@@ -7,7 +7,7 @@ import React from "react";
  * @param {string} teamName - Nom de l'équipe
  * @param {string} className - Classes CSS supplémentaires (optionnel)
  */
-const TeamLogo = ({ teamId, teamName, className = "w-10 h-10 object-contain" }) => {
+const TeamLogo = ({ teamId: _teamId, teamName, className = "w-10 h-10 object-contain" }) => {
   // Transforme le nom de l'équipe en format minuscule avec tirets
   const fileName = teamName.toLowerCase().replace(/\s+/g, "-");
   const logoPath = `${process.env.PUBLIC_URL}/images/nba-logos/${fileName}.svg`;

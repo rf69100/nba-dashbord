@@ -127,7 +127,7 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
       {/* Message si aucun résultat */}
       {search && filteredPlayers.length === 0 && (
         <div className="mb-6 bg-red-100 text-red-700 p-4 rounded-lg text-center">
-          Aucun joueur trouvé pour "{search}"
+          Aucun joueur trouvé pour &quot;{search}&quot;
         </div>
       )}
 

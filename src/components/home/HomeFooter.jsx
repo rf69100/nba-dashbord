@@ -15,7 +15,7 @@ export default function HomeFooter() {
         NBA Dashboard - Saison 2024-2025
       </p>
       <p className="text-white/70 text-xs sm:text-sm">
-        Statistiques mises à jour en temps réel pour vivre l'expérience du vrai
+        Statistiques mises à jour en temps réel pour vivre l&apos;expérience du vrai
         terrain !
       </p>
     </motion.div>

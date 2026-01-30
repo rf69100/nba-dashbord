@@ -35,6 +35,7 @@ export default function useTeamsComparison() {
 
         setTeams(transformedTeams);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Erreur lors du chargement des équipes:', err);
         setError(err.message || 'Impossible de charger les équipes');
       } finally {
@@ -80,6 +81,7 @@ export default function useTeamsComparison() {
           // Ajouter à la sélection
           setSelectedTeams([...selectedTeams, updatedTeam]);
         } catch (err) {
+        // eslint-disable-next-line no-console
           console.error('Erreur lors du chargement des stats de l\'équipe:', err);
           // Ajouter sans stats en cas d'erreur
           setSelectedTeams([...selectedTeams, team]);

@@ -38,6 +38,7 @@ export default function useComparisonData() {
 
         setPlayers(transformedPlayers);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Erreur lors du chargement des joueurs:', err);
         setError(err.message || 'Impossible de charger les données');
       } finally {
@@ -81,6 +82,7 @@ export default function useComparisonData() {
           // Ajouter à la sélection
           setSelectedPlayers([...selectedPlayers, updatedPlayer]);
         } catch (err) {
+        // eslint-disable-next-line no-console
           console.error('Erreur lors du chargement des stats du joueur:', err);
           // Ajouter sans stats en cas d'erreur
           setSelectedPlayers([...selectedPlayers, player]);

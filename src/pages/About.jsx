@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import PageTitle from "../components/layout/PageTitle";
 import PageContainer from "../components/layout/PageContainer";
-import Footer from "../components/layout/Footer";
 
 /**
  * Page À Propos - NBA Dashboard c'est quoi ?
@@ -25,7 +24,7 @@ export default function About() {
             transition={{ delay: 0.2 }}
           >
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Qu'est-ce que NBA Dashboard ?
+              Qu&apos;est-ce que NBA Dashboard ?
             </h2>
             <p className="text-gray-700 text-lg leading-relaxed">
               NBA Dashboard est une plateforme complète dédiée aux statistiques NBA. 
@@ -106,7 +105,7 @@ export default function About() {
             </h2>
             <p className="text-gray-700 text-lg leading-relaxed mb-4">
               NBA Dashboard est un projet open-source construit avec les technologies web modernes. 
-              Nous croyons en la transparence et encourageons la communauté à contribuer à l'amélioration 
+              Nous croyons en la transparence et encourageons la communauté à contribuer à l&apos;amélioration 
               de la plateforme.
             </p>
             <p className="text-gray-600">

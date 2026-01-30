@@ -84,7 +84,7 @@ export default function OfficialStats() {
             <p className="text-gray-700 text-lg leading-relaxed">
               NBA Dashboard utilise une API personnalisée développée pour récupérer les données 
               officielles de la NBA. Toutes nos statistiques sont basées sur les données officielles 
-              de la ligue, garantissant l'exactitude et la fiabilité des informations.
+              de la ligue, garantissant l&apos;exactitude et la fiabilité des informations.
             </p>
           </motion.section>
 
@@ -192,7 +192,7 @@ export default function OfficialStats() {
           >
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Engagement envers la Transparence</h2>
             <p className="text-gray-700 mb-4">
-              Nous nous engageons à fournir des statistiques précises et à jour. Nos données sont:
+              Nous nous engageons à fournir des statistiques précises et à jour. Nos données sont :
             </p>
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start">

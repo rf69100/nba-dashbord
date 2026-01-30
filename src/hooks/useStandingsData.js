@@ -31,6 +31,7 @@ export function useStandingsData(conference) {
 
         setTeams(teamsWithRank);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error("Erreur lors du chargement des équipes:", err);
         setError(err.message || "Impossible de charger les données");
       } finally {

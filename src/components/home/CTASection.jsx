@@ -37,10 +37,10 @@ export default function CTASection() {
     >
       <div className="max-w-3xl mx-auto text-center bg-white/30 backdrop-blur-sm rounded-3xl p-12 border border-white/20">
         <h2 className="text-3xl sm:text-4xl font-bold mb-6 drop-shadow-lg text-white">
-          Prêt à Plonger dans l'Univers NBA ?
+          Prêt à Plonger dans l&apos;Univers NBA ?
         </h2>
         <p className="text-lg mb-10 text-white/95 max-w-2xl mx-auto">
-          Commence par explorer les joueurs ou découvre le classement actuel des équipes pour trouver ce qui t'intéresse le plus.
+          Commence par explorer les joueurs ou découvre le classement actuel des équipes pour trouver ce qui t&apos;intéresse le plus.
         </p>
         <motion.div
           className="flex flex-col sm:flex-row gap-4 justify-center"

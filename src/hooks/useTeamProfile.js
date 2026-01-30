@@ -19,6 +19,7 @@ export default function useTeamProfile(teamId) {
         const teamData = await getTeamWithStats(teamId);
         setTeam(teamData);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Erreur lors du chargement de l\'équipe:', err);
         setError(err.message || 'Impossible de charger les données de l\'équipe');
       } finally {
