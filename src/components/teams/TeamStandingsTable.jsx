@@ -41,14 +41,14 @@ const TeamStandingsTable = ({ teams }) => {
               {/* Équipe avec logo */}
               <div className="col-span-5 flex items-center gap-3">
                 <img
-                  src={`${process.env.PUBLIC_URL}${team.logo_url}`}
+                  src={team.logo_url}
                   alt={team.name}
-                  className="w-12 h-12 object-contain"
+                  className="w-12 h-12 object-contain flex-shrink-0"
                   onError={(e) => {
                     e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`;
                   }}
                 />
-                <span className="font-medium text-gray-900">{team.name}</span>
+                <span className="font-medium text-gray-900 truncate">{team.name}</span>
               </div>
 
               {/* Victoires */}

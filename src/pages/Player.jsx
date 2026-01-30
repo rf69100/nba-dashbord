@@ -8,7 +8,7 @@ import PageContainer from "../components/layout/PageContainer";
 import PageLoader from "../components/layout/PageLoader";
 import ErrorMessage from "../components/layout/ErrorMessage";
 import PageTitle from "../components/layout/PageTitle";
-import { applyAllFilters } from "../utils/players/filterPlayers";
+import { applyAllFilters } from "../utils/filters";
 
 /**
  * Page joueurs - Recherche et accès aux profils

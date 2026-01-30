@@ -26,9 +26,9 @@ export default function StandingsCard({ team, index }) {
         <div className="flex items-center space-x-3 mb-3">
           <span className="text-lg font-bold text-gray-700 w-8">#{team.rank}</span>
           <img
-            src={`${process.env.PUBLIC_URL}${team.logo_url}`}
+            src={team.logo_url}
             alt={team.name}
-            className="w-10 h-10 object-contain"
+            className="w-10 h-10 object-contain flex-shrink-0"
             onError={(e) => {
               e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`;
             }}

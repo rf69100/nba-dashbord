@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import StatRow from '../common/StatRow';
-import { calculateAverage } from '../../utils/players/playerStats';
+import { calculateAverage } from '../../utils/playerStats';
 
 /**
  * Carte des statistiques par match du joueur

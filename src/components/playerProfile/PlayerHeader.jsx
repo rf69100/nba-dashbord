@@ -34,9 +34,9 @@ export default function PlayerHeader({ player, teamId }) {
             {player.team_logo_url && teamId && (
               <Link to={`/team/${teamId}`} className="absolute -bottom-4 -right-4">
                 <img
-                  src={`${process.env.PUBLIC_URL}${player.team_logo_url}`}
+                  src={player.team_logo_url}
                   alt={player.team_name}
-                  className="w-20 h-20 bg-white rounded-full p-2 shadow-xl hover:scale-110 transition-transform cursor-pointer"
+                  className="w-20 h-20 bg-white rounded-full p-1 shadow-xl hover:scale-110 transition-transform cursor-pointer"
                   onError={(e) => {
                     e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`;
                   }}

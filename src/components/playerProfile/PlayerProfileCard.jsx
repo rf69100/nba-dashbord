@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import InfoRow from '../common/InfoRow';
-import { calculateExperience } from '../../utils/players/playerStats';
+import { calculateExperience } from '../../utils/playerStats';
 
 /**
  * Carte des informations personnelles du joueur
