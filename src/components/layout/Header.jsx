@@ -39,6 +39,7 @@ export default function Header() {
           <Link to="/teams" className="hover:text-yellow-400 transition">Teams</Link>
           <Link to="/player" className="hover:text-yellow-400 transition">Players</Link>
           <Link to="/comparison" className="hover:text-yellow-400 transition">Comparison</Link>
+          <Link to="/quiz" className="hover:text-yellow-400 transition">Quiz</Link>
         </div>
 
         {/* Bouton hamburger - Mobile */}
@@ -131,6 +132,13 @@ export default function Header() {
                   onClick={closeMenu}
                 >
                   Comparison
+                </Link>
+                <Link 
+                  to="/quiz" 
+                  className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
+                  onClick={closeMenu}
+                >
+                  Quiz
                 </Link>
               </div>
             </motion.div>

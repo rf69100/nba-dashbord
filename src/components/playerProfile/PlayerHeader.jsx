@@ -56,7 +56,7 @@ export default function PlayerHeader({ player, teamId }) {
           {/* Informations principales */}
           <div className="flex-1 text-center md:text-left">
             <div className="text-sm font-semibold mb-2">
-              {player.team_name} | #{player.jersey_number || '—'} | {player.position}
+              {player.team_name} | #{player.jersey_number} | {player.position}
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4">
               {player.display_name}
