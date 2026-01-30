@@ -86,7 +86,7 @@ export default function Header() {
             >
               {/* Header du menu mobile */}
               <div className="flex justify-between items-center p-4 border-b border-gray-700">
-                <h2 className="text-lg font-bold">Menu</h2>
+                <h2 className="text-xl font-bold">Menu</h2>
                 <button
                   onClick={closeMenu}
                   className="text-2xl hover:text-yellow-400 transition"
