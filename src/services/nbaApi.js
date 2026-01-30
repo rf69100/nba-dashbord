@@ -318,6 +318,7 @@ export const getPlayer = async (playerId) => {
   }
 
   // Retourner sans les lastGames pour une version allégée
+  // eslint-disable-next-line no-unused-vars
   const { lastGames, ...playerWithoutGames } = player;
   return playerWithoutGames;
 };

@@ -21,19 +21,18 @@ export default function Footer() {
     {
       title: "Fonctionnalités",
       links: [
-        { label: "Rechercher", path: "/player" },
+        { label: "Rechercher un joueur", path: "/player" },
+        { label: "Rechercher une équipe", path: "/teams" },
         { label: "Comparer", path: "/comparison" },
         { label: "Classements", path: "/standings" },
-        { label: "Profils", path: "/teams" }
       ]
     },
     {
       title: "À Propos",
       links: [
-        { label: "NBA Dashboard", path: "/" },
-        { label: "Saison 2025-26", path: "/" },
-        { label: "Données en Temps Réel", path: "/" },
-        { label: "Statistiques Officielles", path: "/" }
+        { label: "NBA Dashboard c'est quoi ?", path: "/about" },
+        { label: "Saison 2024-25", path: "/season" },
+        { label: "Statistiques Officielles", path: "/official-stats" }
       ]
     }
   ];
@@ -107,7 +106,7 @@ export default function Footer() {
             &copy; {currentYear} NBA Dashboard. Tous droits réservés.
           </p>
           <p className="mt-4 md:mt-0">
-            Données mises à jour en temps réel - Saison NBA 2025-2026
+            Données mises à jour en temps réel - Saison NBA 2024-2025
           </p>
           <div className="flex gap-4 mt-4 md:mt-0">
             <a

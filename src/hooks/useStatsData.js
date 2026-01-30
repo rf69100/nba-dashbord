@@ -37,6 +37,7 @@ export const useStatsData = () => {
 
         setPlayers(playersWithStats.filter((p) => p !== null));
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error("Erreur lors du chargement des stats:", err);
         setError(err.message || "Impossible de charger les données");
       } finally {

@@ -18,6 +18,7 @@ export function useTeamsData() {
         const data = await getTeamsByDivision();
         setConferences(data);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error("Erreur lors du chargement des équipes:", err);
         setError(err.message || "Impossible de charger les équipes");
       } finally {

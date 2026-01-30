@@ -18,6 +18,7 @@ export default function usePlayersData() {
         const response = await getPlayers();
         setPlayers(response.players || []);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Erreur lors du chargement des joueurs:', err);
         setError(err.message || 'Impossible de charger les joueurs');
       } finally {
