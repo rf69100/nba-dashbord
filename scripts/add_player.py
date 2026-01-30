@@ -22,9 +22,12 @@ from typing import Optional, Tuple, List, Dict
 # =============================================================================
 
 SCRIPT_DIR = Path(__file__).parent
-STATS_FILE = SCRIPT_DIR / "players_stats.txt"
-PLAYER_IDS_FILE = SCRIPT_DIR / "player_nba_ids.json"
-PLAYER_PROFILES_FILE = SCRIPT_DIR / "player_profiles.json"
+ROOT_DIR = SCRIPT_DIR.parent
+DATA_DIR = ROOT_DIR / "data"
+
+STATS_FILE = DATA_DIR / "players_stats.txt"
+PLAYER_IDS_FILE = DATA_DIR / "player_nba_ids.json"
+PLAYER_PROFILES_FILE = DATA_DIR / "player_profiles.json"
 
 # Équipes NBA valides
 VALID_TEAMS = {

@@ -30,10 +30,13 @@ from pathlib import Path
 # =============================================================================
 
 SCRIPT_DIR = Path(__file__).parent
-STATS_FILE = SCRIPT_DIR / "players_stats.txt"
-NBA_DATA_FILE = SCRIPT_DIR / "src" / "services" / "nbaData.js"
-PLAYER_IDS_FILE = SCRIPT_DIR / "player_nba_ids.json"
-PLAYER_PROFILES_FILE = SCRIPT_DIR / "player_profiles.json"
+ROOT_DIR = SCRIPT_DIR.parent
+DATA_DIR = ROOT_DIR / "data"
+
+STATS_FILE = DATA_DIR / "players_stats.txt"
+NBA_DATA_FILE = ROOT_DIR / "src" / "services" / "nbaData.js"
+PLAYER_IDS_FILE = DATA_DIR / "player_nba_ids.json"
+PLAYER_PROFILES_FILE = DATA_DIR / "player_profiles.json"
 
 # Mapping équipe abréviation -> nom de fichier logo
 TEAM_LOGOS: Dict[str, str] = {
