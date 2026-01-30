@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import PercentageBar from '../common/PercentageBar';
-import { calculatePercentage } from '../../utils/players/playerStats';
+import { calculatePercentage } from '../../utils/playerStats';
 
 /**
  * Carte des pourcentages de tir du joueur

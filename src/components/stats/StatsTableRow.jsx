@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import PlayerAvatar from "../common/PlayerAvatar";
 
 /**
  * Composant pour une ligne du tableau des stats
@@ -31,25 +32,22 @@ export default function StatsTableRow({ player, index, statKey }) {
         transition={{ delay: 0.5 + index * 0.02 }}
         whileHover={{ backgroundColor: "rgba(59, 130, 246, 0.05)" }}
       >
-      <td className="px-3 sm:px-4 py-3 sm:py-4">
-        <div className="flex items-center justify-center">
+      <td className="px-3 sm:px-4 py-3 sm:py-4 align-middle">
+        <div className="flex items-center justify-center h-full">
           <span className={`text-base sm:text-lg font-bold ${getRankColor(index)}`}>
             {getRankMedal(index)}
           </span>
         </div>
       </td>
-      <td className="px-3 sm:px-4 py-3 sm:py-4">
-        <div className="flex items-center gap-2">
-          <img
-            src={player.photo}
-            alt={player.name}
-            className="w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-full object-cover border-2 border-blue-300 flex-shrink-0"
-            onError={(e) => {
-              const name = player.name.replace(" ", "+");
-              e.target.src = `https://ui-avatars.com/api/?name=${name}&size=48&background=3b82f6&color=fff&bold=true`;
-            }}
+      <td className="px-3 sm:px-4 py-3 sm:py-4 align-middle">
+        <div className="flex items-center gap-3">
+          <PlayerAvatar
+            photoUrl={player.photo}
+            playerName={player.name}
+            size="md"
+            borderColor="border-blue-300"
           />
-          <div className="min-w-0">
+          <div className="min-w-0 flex flex-col justify-center">
             <div className="font-bold text-gray-900 text-xs sm:text-sm truncate">
               {player.name}
             </div>
@@ -59,20 +57,15 @@ export default function StatsTableRow({ player, index, statKey }) {
           </div>
         </div>
       </td>
-      <td className="px-3 sm:px-4 py-3 sm:py-4 text-center hidden md:table-cell">
+      <td className="px-3 sm:px-4 py-3 sm:py-4 text-center align-middle hidden md:table-cell">
         <span className="text-blue-600 font-bold text-xs sm:text-sm">{player.team}</span>
       </td>
-      <td className="px-3 sm:px-4 py-3 sm:py-4 text-center text-gray-600 font-semibold hidden lg:table-cell text-xs sm:text-sm">
+      <td className="px-3 sm:px-4 py-3 sm:py-4 text-center align-middle text-gray-600 font-semibold hidden lg:table-cell text-xs sm:text-sm">
         {player.stats.gamesPlayed}
       </td>
-      <td className="px-3 sm:px-4 py-3 sm:py-4 text-center">
+      <td className="px-3 sm:px-4 py-3 sm:py-4 text-center align-middle">
         <span className="text-base sm:text-lg lg:text-xl font-extrabold text-blue-600">
           {player.stats[statKey]}
-        </span>
-      </td>
-      <td className="px-3 sm:px-4 py-3 sm:py-4 text-center hidden lg:table-cell">
-        <span className="inline-block px-2 sm:px-3 py-1 sm:py-2 bg-blue-600 text-white text-xs font-semibold rounded shadow-md">
-          Voir profil
         </span>
       </td>
     </motion.tr>

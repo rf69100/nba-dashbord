@@ -16,7 +16,7 @@ export default function StatsInfoBox() {
         <div className="min-w-0">
           <h3 className="font-bold text-gray-800 mb-1 sm:mb-2 text-sm sm:text-base">À propos</h3>
           <p className="text-gray-700 text-xs sm:text-sm leading-relaxed">
-            Statistiques des 10 derniers matchs de la saison NBA 2024-25. Moyennes par match mises à jour quotidiennement.
+            Statistiques basées sur l&apos;ensemble de la saison NBA 2024-2025.
           </p>
         </div>
       </div>

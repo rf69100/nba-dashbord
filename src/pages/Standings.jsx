@@ -48,7 +48,7 @@ const Standings = () => {
 
       {/* Tableau avec conteneur responsive */}
       <motion.div
-        className="w-full max-w-4xl bg-white text-gray-900 rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-6 overflow-x-auto"
+        className="w-full max-w-5xl bg-white text-gray-900 rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-6 overflow-x-auto"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8 }}

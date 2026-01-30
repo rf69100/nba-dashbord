@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import PlayerAvatar from '../common/PlayerAvatar';
 
 /**
  * Section affichant le roster complet de l'équipe
@@ -26,17 +27,12 @@ export default function TeamRoster({ roster }) {
             to={`/player/${player.id}`}
             className="flex items-center gap-3 p-4 rounded-lg bg-gradient-to-br from-orange-50 to-yellow-50 hover:from-orange-100 hover:to-yellow-100 transition-all duration-200 hover:scale-105 hover:shadow-md group"
           >
-            <div className="flex-shrink-0">
-              <img
-                src={player.photo_url || player.photo}
-                alt={player.name}
-                className="w-12 h-12 rounded-full object-cover border-2 border-red-300 shadow-md"
-                onError={(e) => {
-                  const name = player.name.replace(' ', '+');
-                  e.target.src = `https://ui-avatars.com/api/?name=${name}&size=48&background=dc2626&color=fff&bold=true`;
-                }}
-              />
-            </div>
+            <PlayerAvatar
+              photoUrl={player.photo_url || player.photo}
+              playerName={player.name}
+              size="md"
+              borderColor="border-red-300"
+            />
             <div className="flex-1 min-w-0">
               <div className="font-bold text-gray-900 truncate group-hover:text-red-600 transition">
                 {player.name}

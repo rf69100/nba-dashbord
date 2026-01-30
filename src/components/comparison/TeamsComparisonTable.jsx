@@ -40,11 +40,13 @@ export default function TeamsComparisonTable({ teams }) {
             {teams.map((team) => (
               <th key={team.id} className="p-4 text-center font-bold">
                 <div className="flex flex-col items-center gap-2">
-                  <TeamLogo
-                    teamId={team.id}
-                    teamName={team.name}
-                    className="w-10 h-10 object-contain"
-                  />
+                  <div className="w-10 h-10">
+                    <TeamLogo
+                      teamId={team.id}
+                      teamName={team.name}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
                   <div className="text-sm text-gray-900 font-bold">{team.abbreviation}</div>
                   <div className="text-xs text-gray-700">{team.name}</div>
                 </div>

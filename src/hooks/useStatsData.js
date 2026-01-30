@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { getPlayers, getPlayerWithStats } from "../services/nbaApi";
-import { preparePlayerStats } from "../utils/stats/calculateStats";
+import { getPlayers } from "../services/nbaApi";
+import { preparePlayerSeasonStats } from "../utils/statsHelpers";
 
 /**
  * Hook personnalisé pour gérer le chargement et la préparation des données de stats
+ * Utilise les stats de SAISON (totaux divisés par GP) et non les stats de matchs
  * @returns {Object} État contenant players, loading, error
  */
 export const useStatsData = () => {
@@ -19,23 +20,13 @@ export const useStatsData = () => {
 
         const response = await getPlayers();
 
-        // Charger les stats de tous les joueurs
-        const allPlayers = response.players.slice(0, 30);
-        const playersWithStats = await Promise.all(
-          allPlayers.map(async (player) => {
-            try {
-              const playerData = await getPlayerWithStats(player.id);
-              if (playerData && playerData.lastGames) {
-                return preparePlayerStats(playerData, playerData.lastGames);
-              }
-              return null;
-            } catch {
-              return null;
-            }
-          })
-        );
+        // Utiliser les season_stats (totaux de saison) pour calculer les moyennes
+        const playersWithStats = response.players
+          .filter(player => player.season_stats && player.season_stats.GP > 0)
+          .map(player => preparePlayerSeasonStats(player))
+          .filter(p => p !== null);
 
-        setPlayers(playersWithStats.filter((p) => p !== null));
+        setPlayers(playersWithStats);
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error("Erreur lors du chargement des stats:", err);
