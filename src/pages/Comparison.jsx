@@ -41,8 +41,8 @@ export default function Comparison() {
         transition={{ delay: 0.5, duration: 1 }}
       >
         {mode === 'players'
-          ? 'Compare les statistiques des joueurs et leurs performances sur la saison NBA 2025-2026.'
-          : 'Compare les statistiques et performances des équipes NBA de la saison 2025-2026.'}
+          ? 'Compare les statistiques des joueurs et leurs performances sur la saison NBA 2024-2025.'
+          : 'Compare les statistiques et performances des équipes NBA de la saison 2024-2025.'}
       </motion.p>
 
       {/* Affichage pendant le chargement */}
@@ -77,7 +77,7 @@ export default function Comparison() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8, duration: 1 }}
       >
-        Données basées sur la saison NBA 2025-2026. Sélectionne {mode === 'players' ? 'un ou deux joueurs' : '1 ou 2 équipes'} pour comparer leurs performances.
+        Données basées sur la saison NBA 2024-2025. Sélectionne {mode === 'players' ? 'un ou deux joueurs' : '1 ou 2 équipes'} pour comparer leurs performances.
       </motion.p>
     </PageContainer>
   );

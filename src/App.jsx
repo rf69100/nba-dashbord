@@ -11,6 +11,9 @@ import Standings from "./pages/Standings"; // Page classement équipes
 import Stats from "./pages/Stats"; // Page des statistiques
 import Teams from "./pages/Teams"; // Page des équipes
 import TeamProfile from "./pages/TeamProfile"; // Page de profil équipe
+import About from "./pages/About"; // Page À Propos
+import Season from "./pages/Season"; // Page Saison 2024-25
+import OfficialStats from "./pages/OfficialStats"; // Page Statistiques Officielles
 
 /**
  * Composant racine de l'application NBA Dashboard.
@@ -41,6 +44,12 @@ function App() {
             <Route path="/standings" element={<Standings />} />
             {/* Route vers la page des statistiques */}
             <Route path="/stats" element={<Stats />} />
+            {/* Route vers la page À Propos */}
+            <Route path="/about" element={<About />} />
+            {/* Route vers la page Saison 2024-25 */}
+            <Route path="/season" element={<Season />} />
+            {/* Route vers la page Statistiques Officielles */}
+            <Route path="/official-stats" element={<OfficialStats />} />
           </Routes>
         </main>
         <Footer />

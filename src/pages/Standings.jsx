@@ -73,7 +73,7 @@ const Standings = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 1 }}
       >
-        Classement basé sur la saison NBA 2025-2026.
+        Classement basé sur la saison NBA 2024-2025.
       </motion.p>
     </PageContainer>
   );
