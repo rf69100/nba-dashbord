@@ -6,6 +6,7 @@ import {
 import { motion } from "framer-motion"; // Pour les animations
 import PlayerCard from "./PlayerCard"; // Carte individuelle du joueur
 import SearchBar from "./SearchBar"; // Barre de recherche réutilisable
+import PlayerAvatar from "../common/PlayerAvatar"; // Avatar optimisé
 
 /**
  * Composant d'affichage et de comparaison des statistiques des joueurs sélectionnés.
@@ -105,16 +106,13 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
                 }}
                 className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-br from-orange-50 to-yellow-50 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] text-left"
               >
-                <img
-                  src={p.info?.photo}
-                  alt={p.name}
-                  className="w-16 h-16 rounded-full object-cover border-2 border-white shadow"
-                  onError={(e) => {
-                    const name = (p.name || "NBA").replace(" ", "+");
-                    e.target.src = `https://ui-avatars.com/api/?name=${name}&size=64&background=F97316&color=fff&bold=true`;
-                  }}
+                <PlayerAvatar
+                  photoUrl={p.info?.photo}
+                  playerName={p.name}
+                  size="lg"
+                  borderColor="border-orange-200"
                 />
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <div className="font-bold text-gray-900">{p.name}</div>
                   <div className="text-sm text-gray-600">{p.team} • {p.info.position}</div>
                 </div>
@@ -127,7 +125,7 @@ export default function PlayerStatsChart({ selectedPlayers, togglePlayer, allPla
       {/* Message si aucun résultat */}
       {search && filteredPlayers.length === 0 && (
         <div className="mb-6 bg-red-100 text-red-700 p-4 rounded-lg text-center">
-          Aucun joueur trouvé pour "{search}"
+          Aucun joueur trouvé pour &quot;{search}&quot;
         </div>
       )}
 

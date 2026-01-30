@@ -22,21 +22,29 @@ export default function PlayerHeader({ player, teamId }) {
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
           {/* Photo du joueur */}
           <div className="relative">
-            <img
-              src={player.photo_url || player.info?.photo}
-              alt={player.display_name}
-              className="w-64 h-64 object-cover rounded-lg border-4 border-white shadow-2xl"
-              onError={(e) => {
-                const name = (player.display_name || player.name).replace(' ', '+');
-                e.target.src = `https://ui-avatars.com/api/?name=${name}&size=256&background=3B82F6&color=fff&bold=true`;
-              }}
-            />
+            <div className="w-64 h-64 overflow-hidden rounded-lg border-4 border-white shadow-2xl">
+              <img
+                src={player.photo_url || player.info?.photo}
+                alt={player.display_name}
+                className="w-full h-full object-cover"
+                style={{ 
+                  imageRendering: 'auto',
+                  WebkitBackfaceVisibility: 'hidden',
+                  backfaceVisibility: 'hidden'
+                }}
+                loading="lazy"
+                onError={(e) => {
+                  const name = (player.display_name || player.name).replace(' ', '+');
+                  e.target.src = `https://ui-avatars.com/api/?name=${name}&size=512&background=3B82F6&color=fff&bold=true`;
+                }}
+              />
+            </div>
             {player.team_logo_url && teamId && (
               <Link to={`/team/${teamId}`} className="absolute -bottom-4 -right-4">
                 <img
-                  src={`${process.env.PUBLIC_URL}${player.team_logo_url}`}
+                  src={player.team_logo_url}
                   alt={player.team_name}
-                  className="w-20 h-20 bg-white rounded-full p-2 shadow-xl hover:scale-110 transition-transform cursor-pointer"
+                  className="w-20 h-20 bg-white rounded-full p-1 shadow-xl hover:scale-110 transition-transform cursor-pointer"
                   onError={(e) => {
                     e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`;
                   }}
@@ -48,7 +56,7 @@ export default function PlayerHeader({ player, teamId }) {
           {/* Informations principales */}
           <div className="flex-1 text-center md:text-left">
             <div className="text-sm font-semibold mb-2">
-              {player.team_name} | #{player.jersey_number || '—'} | {player.position}
+              {player.team_name} | #{player.jersey_number} | {player.position}
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4">
               {player.display_name}

@@ -24,15 +24,17 @@ export default function StandingsCard({ team, index }) {
       >
         {/* Informations principales de l'équipe */}
         <div className="flex items-center space-x-3 mb-3">
-          <span className="text-lg font-bold text-gray-700 w-8">#{team.rank}</span>
-          <img
-            src={`${process.env.PUBLIC_URL}${team.logo_url}`}
-            alt={team.name}
-            className="w-10 h-10 object-contain"
-            onError={(e) => {
-              e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`;
-            }}
-          />
+          <span className="text-lg font-bold text-gray-700 w-8 flex-shrink-0">#{team.rank}</span>
+          <div className="w-10 h-10 flex-shrink-0">
+            <img
+              src={team.logo_url}
+              alt={team.name}
+              className="w-full h-full object-contain"
+              onError={(e) => {
+                e.target.src = `${process.env.PUBLIC_URL}/images/nba-logos/default.svg`;
+              }}
+            />
+          </div>
           <span className="font-bold text-gray-900 text-sm flex-1 truncate">{team.name}</span>
         </div>
 

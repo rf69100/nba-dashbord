@@ -7,7 +7,7 @@ export default function HeroSection({ stats }) {
   const statsDisplay = [
     { label: 'Joueurs', value: stats.players },
     { label: 'Équipes', value: stats.teams },
-    { label: 'Saison', value: '2025-26' },
+    { label: 'Saison', value: '2024-2025' },
   ];
 
   const containerVariants = {

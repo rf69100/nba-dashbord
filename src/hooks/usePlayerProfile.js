@@ -32,6 +32,7 @@ export default function usePlayerProfile(playerId) {
           setTeamId(team.id);
         }
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Erreur lors du chargement du joueur:', err);
         setError(err.message || 'Impossible de charger les données du joueur');
       } finally {

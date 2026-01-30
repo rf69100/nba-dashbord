@@ -12,10 +12,10 @@ export default function HomeFooter() {
       transition={{ delay: 1.5, duration: 0.8 }}
     >
       <p className="text-white/80 text-sm sm:text-base mb-2">
-        NBA Dashboard - Saison 2025-2026
+        NBA Dashboard - Saison 2024-2025
       </p>
       <p className="text-white/70 text-xs sm:text-sm">
-        Statistiques mises à jour en temps réel pour vivre l'expérience du vrai
+        Statistiques mises à jour en temps réel pour vivre l&apos;expérience du vrai
         terrain !
       </p>
     </motion.div>

@@ -1,343 +1,310 @@
 /**
- * Service API local pour le dashboard NBA
- * Utilise les données statiques de nbaData.js au lieu d'appels API externes
+ * SERVICE NBA - Accès aux données
+ * ================================
+ * 
+ * Point d'entrée unique pour récupérer les données NBA.
+ * Toutes les fonctions sont async pour permettre une future migration vers une vraie API.
+ * 
+ * Usage:
+ *   import { getPlayers, getTeams } from '../services/nbaApi';
  */
 
-import { teams, players, getTeamsWithStats } from './nbaData';
+import { teams, players, getTeamsWithStats, getPlayersWithUrls } from './nbaData';
+
+// Délai simulé pour une meilleure UX (évite le flash de chargement)
+const DELAY = 100;
+const wait = () => new Promise(r => setTimeout(r, DELAY));
+
+// ─────────────────────────────────────────────────────────────
+// ÉQUIPES
+// ─────────────────────────────────────────────────────────────
 
 /**
- * ========================================
- * ENDPOINTS TEAMS (Équipes)
- * ========================================
+ * Récupère le classement des équipes
  */
-
-/**
- * Récupérer le classement (standings) des équipes
- * @param {object} filters - Filtres optionnels { conference: 'East' ou 'West' }
- * @returns {Promise<Array>} - Tableau des équipes avec leurs statistiques
- */
-export const getStandings = async (filters = {}) => {
-  // Simuler un délai réseau minime pour UX
-  await new Promise(resolve => setTimeout(resolve, 100));
-
-  let teamsData = getTeamsWithStats();
-
-  // Filtrer par conférence si spécifié
+export async function getStandings(filters = {}) {
+  await wait();
+  
+  let data = getTeamsWithStats();
+  
   if (filters.conference) {
-    teamsData = teamsData.filter(team => team.conference === filters.conference);
+    data = data.filter(t => t.conference === filters.conference);
   }
-
-  // Trier par nombre de victoires (décroissant)
-  teamsData.sort((a, b) => b.wins - a.wins);
-
-  return teamsData;
-};
+  
+  return data.sort((a, b) => b.wins - a.wins);
+}
 
 /**
- * Récupérer toutes les équipes (sans statistiques)
- * @param {object} filters - Filtres optionnels { conference, division, page, limit }
- * @returns {Promise<object>} - { teams: Array, pagination: Object }
+ * Récupère toutes les équipes avec pagination optionnelle
  */
-export const getTeams = async (filters = {}) => {
-  await new Promise(resolve => setTimeout(resolve, 100));
-
-  let teamsData = [...teams];
-
-  // Filtrer par conférence si spécifié
+export async function getTeams(filters = {}) {
+  await wait();
+  
+  let data = getTeamsWithStats(); // Utilise getTeamsWithStats pour avoir les logos avec PUBLIC_URL
+  
   if (filters.conference) {
-    teamsData = teamsData.filter(team => team.conference === filters.conference);
+    data = data.filter(t => t.conference === filters.conference);
   }
-
-  // Pagination
+  
+  // Pagination simple
   const page = filters.page || 1;
-  const limit = filters.limit || teamsData.length;
-  const startIndex = (page - 1) * limit;
-  const paginatedTeams = teamsData.slice(startIndex, startIndex + limit);
-
+  const limit = filters.limit || data.length;
+  const start = (page - 1) * limit;
+  
   return {
-    teams: paginatedTeams,
+    teams: data.slice(start, start + limit),
     pagination: {
-      total: teamsData.length,
+      total: data.length,
       page,
       limit,
-      totalPages: Math.ceil(teamsData.length / limit)
+      totalPages: Math.ceil(data.length / limit)
     }
   };
-};
+}
 
 /**
- * Récupérer toutes les équipes organisées par conférence et division
- * @returns {Promise<object>} - Équipes organisées { Eastern: {...}, Western: {...} }
+ * Récupère les équipes organisées par conférence et division
  */
-export const getTeamsByDivision = async () => {
-  await new Promise(resolve => setTimeout(resolve, 100));
-
-  const allTeams = teams;
-
-  // Organiser les équipes par conférence et division
-  const organized = {
+export async function getTeamsByDivision() {
+  await wait();
+  
+  const teamsData = getTeamsWithStats();
+  
+  return {
     Eastern: {
-      Atlantic: allTeams.filter(t => t.conference === "East" && t.division === "Atlantic"),
-      Central: allTeams.filter(t => t.conference === "East" && t.division === "Central"),
-      Southeast: allTeams.filter(t => t.conference === "East" && t.division === "Southeast"),
+      Atlantic: teamsData.filter(t => t.conference === "East" && t.division === "Atlantic"),
+      Central: teamsData.filter(t => t.conference === "East" && t.division === "Central"),
+      Southeast: teamsData.filter(t => t.conference === "East" && t.division === "Southeast"),
     },
     Western: {
-      Northwest: allTeams.filter(t => t.conference === "West" && t.division === "Northwest"),
-      Pacific: allTeams.filter(t => t.conference === "West" && t.division === "Pacific"),
-      Southwest: allTeams.filter(t => t.conference === "West" && t.division === "Southwest"),
+      Northwest: teamsData.filter(t => t.conference === "West" && t.division === "Northwest"),
+      Pacific: teamsData.filter(t => t.conference === "West" && t.division === "Pacific"),
+      Southwest: teamsData.filter(t => t.conference === "West" && t.division === "Southwest"),
     },
   };
-
-  return organized;
-};
+}
 
 /**
- * Récupérer une équipe spécifique avec ses statistiques
- * @param {number} teamId - ID de l'équipe
- * @returns {Promise<object>} - Équipe avec statistiques
+ * Récupère les équipes par conférence
  */
-export const getTeamWithStats = async (teamId) => {
-  await new Promise(resolve => setTimeout(resolve, 100));
+export async function getTeamsByConference(conference) {
+  await wait();
+  return getTeamsWithStats().filter(t => t.conference === conference);
+}
 
-  const teamsWithStats = getTeamsWithStats();
-  const team = teamsWithStats.find(t => t.id === parseInt(teamId));
+/**
+ * Récupère une équipe par ID
+ */
+export async function getTeam(teamId) {
+  await wait();
+  const team = getTeamsWithStats().find(t => t.id === parseInt(teamId));
+  if (!team) throw new Error('Équipe non trouvée');
+  return team;
+}
 
-  if (!team) {
-    throw new Error('Équipe non trouvée');
-  }
+// Alias pour compatibilité
+export const getTeamById = getTeam;
 
-  // Enrichir les données de l'équipe avec des informations supplémentaires
-  const enrichedTeam = {
-    ...team,
-    full_name: team.name,
-    abbreviation: getTeamAbbreviation(team.name),
-    city: getTeamCity(team.name),
-    division: getTeamDivision(team.name),
-    // Statistiques simulées (à remplacer par de vraies données si disponibles)
-    stats: {
-      ppg: (112 + Math.random() * 10).toFixed(1),
-      rpg: (42 + Math.random() * 5).toFixed(1),
-      apg: (25 + Math.random() * 5).toFixed(1),
-      spg: (7 + Math.random() * 2).toFixed(1),
-      bpg: (5 + Math.random() * 2).toFixed(1),
-      tpg: (14 + Math.random() * 3).toFixed(1),
-      fgm: (40 + Math.random() * 5).toFixed(1),
-      fga: (88 + Math.random() * 5).toFixed(1),
-      fg_pct: (0.45 + Math.random() * 0.05).toFixed(3),
-      tpm: (12 + Math.random() * 3).toFixed(1),
-      tpa: (35 + Math.random() * 5).toFixed(1),
-      tp_pct: (0.35 + Math.random() * 0.05).toFixed(3),
-      ftm: (18 + Math.random() * 4).toFixed(1),
-      fta: (23 + Math.random() * 4).toFixed(1),
-      ft_pct: (0.75 + Math.random() * 0.10).toFixed(3),
-    },
-    // Roster des joueurs de l'équipe
-    roster: players.filter(p => p.team === team.name).map(p => ({
+/**
+ * Récupère une équipe par ID avec ses stats et roster
+ */
+export async function getTeamWithStats(teamId) {
+  await wait();
+  
+  const team = getTeamsWithStats().find(t => t.id === parseInt(teamId));
+  if (!team) throw new Error('Équipe non trouvée');
+  
+  // Récupérer les joueurs de l'équipe
+  const roster = getPlayersWithUrls()
+    .filter(p => p.team_name === team.name)
+    .map(p => ({
       id: p.id,
       name: p.display_name || p.name,
       jersey_number: p.jersey_number,
       position: p.position,
       photo_url: p.photo_url
-    })),
+    }));
+  
+  return {
+    ...team,
+    full_name: team.name,
+    abbreviation: getAbbreviation(team.name),
+    city: team.name.split(' ').slice(0, -1).join(' '),
+    roster,
+    stats: {
+      ppg: (112 + Math.random() * 10).toFixed(1),
+      rpg: (42 + Math.random() * 5).toFixed(1),
+      apg: (25 + Math.random() * 5).toFixed(1),
+      fg_pct: (0.45 + Math.random() * 0.05).toFixed(3),
+    }
   };
-
-  return enrichedTeam;
-};
-
-// Fonctions utilitaires pour extraire les informations des équipes
-function getTeamAbbreviation(teamName) {
-  const abbreviations = {
-    "Boston Celtics": "BOS",
-    "Brooklyn Nets": "BKN",
-    "New York Knicks": "NYK",
-    "Philadelphia 76ers": "PHI",
-    "Toronto Raptors": "TOR",
-    "Chicago Bulls": "CHI",
-    "Cleveland Cavaliers": "CLE",
-    "Detroit Pistons": "DET",
-    "Indiana Pacers": "IND",
-    "Milwaukee Bucks": "MIL",
-    "Atlanta Hawks": "ATL",
-    "Charlotte Hornets": "CHA",
-    "Miami Heat": "MIA",
-    "Orlando Magic": "ORL",
-    "Washington Wizards": "WAS",
-    "Denver Nuggets": "DEN",
-    "Minnesota Timberwolves": "MIN",
-    "Oklahoma City Thunder": "OKC",
-    "Portland Trail Blazers": "POR",
-    "Utah Jazz": "UTA",
-    "Golden State Warriors": "GSW",
-    "Los Angeles Clippers": "LAC",
-    "Los Angeles Lakers": "LAL",
-    "Phoenix Suns": "PHX",
-    "Sacramento Kings": "SAC",
-    "Dallas Mavericks": "DAL",
-    "Houston Rockets": "HOU",
-    "Memphis Grizzlies": "MEM",
-    "New Orleans Pelicans": "NOP",
-    "San Antonio Spurs": "SAS",
-  };
-  return abbreviations[teamName] || "NBA";
 }
 
-function getTeamCity(teamName) {
-  return teamName.split(' ').slice(0, -1).join(' ');
-}
-
-function getTeamDivision(teamName) {
-  const divisions = {
-    "Boston Celtics": "Atlantic",
-    "Brooklyn Nets": "Atlantic",
-    "New York Knicks": "Atlantic",
-    "Philadelphia 76ers": "Atlantic",
-    "Toronto Raptors": "Atlantic",
-    "Chicago Bulls": "Central",
-    "Cleveland Cavaliers": "Central",
-    "Detroit Pistons": "Central",
-    "Indiana Pacers": "Central",
-    "Milwaukee Bucks": "Central",
-    "Atlanta Hawks": "Southeast",
-    "Charlotte Hornets": "Southeast",
-    "Miami Heat": "Southeast",
-    "Orlando Magic": "Southeast",
-    "Washington Wizards": "Southeast",
-    "Denver Nuggets": "Northwest",
-    "Minnesota Timberwolves": "Northwest",
-    "Oklahoma City Thunder": "Northwest",
-    "Portland Trail Blazers": "Northwest",
-    "Utah Jazz": "Northwest",
-    "Golden State Warriors": "Pacific",
-    "Los Angeles Clippers": "Pacific",
-    "Los Angeles Lakers": "Pacific",
-    "Phoenix Suns": "Pacific",
-    "Sacramento Kings": "Pacific",
-    "Dallas Mavericks": "Southwest",
-    "Houston Rockets": "Southwest",
-    "Memphis Grizzlies": "Southwest",
-    "New Orleans Pelicans": "Southwest",
-    "San Antonio Spurs": "Southwest",
-  };
-  return divisions[teamName] || "Division";
-}
+// ─────────────────────────────────────────────────────────────
+// JOUEURS
+// ─────────────────────────────────────────────────────────────
 
 /**
- * Récupérer une équipe spécifique (sans statistiques)
- * @param {number} teamId - ID de l'équipe
- * @returns {Promise<object>} - Équipe
+ * Récupère tous les joueurs avec filtres et pagination
  */
-export const getTeam = async (teamId) => {
-  await new Promise(resolve => setTimeout(resolve, 100));
-
-  const team = teams.find(t => t.id === parseInt(teamId));
-
-  if (!team) {
-    throw new Error('Équipe non trouvée');
-  }
-
-  return team;
-};
-
-/**
- * ========================================
- * ENDPOINTS PLAYERS (Joueurs)
- * ========================================
- */
-
-/**
- * Récupérer tous les joueurs
- * @param {object} filters - Filtres optionnels { team_id, position, page, limit }
- * @returns {Promise<object>} - { players: Array, pagination: Object }
- */
-export const getPlayers = async (filters = {}) => {
-  await new Promise(resolve => setTimeout(resolve, 100));
-
-  let playersData = [...players];
-
-  // Filtrer par équipe si spécifié
+export async function getPlayers(filters = {}) {
+  await wait();
+  
+  let data = getPlayersWithUrls();
+  
+  // Filtre par équipe
   if (filters.team_id) {
     const team = teams.find(t => t.id === parseInt(filters.team_id));
     if (team) {
-      playersData = playersData.filter(p => p.team_name === team.name);
+      data = data.filter(p => p.team_name === team.name);
     }
   }
-
-  // Filtrer par position si spécifié
+  
+  // Filtre par position
   if (filters.position) {
-    playersData = playersData.filter(p =>
+    data = data.filter(p => 
       p.position.toLowerCase().includes(filters.position.toLowerCase())
     );
   }
-
+  
+  // Filtre par recherche
+  if (filters.search) {
+    const q = filters.search.toLowerCase();
+    data = data.filter(p => 
+      p.name.toLowerCase().includes(q) ||
+      (p.display_name && p.display_name.toLowerCase().includes(q))
+    );
+  }
+  
   // Pagination
   const page = filters.page || 1;
-  const limit = filters.limit || playersData.length;
-  const startIndex = (page - 1) * limit;
-  const paginatedPlayers = playersData.slice(startIndex, startIndex + limit);
-
+  const limit = filters.limit || data.length;
+  const start = (page - 1) * limit;
+  
   return {
-    players: paginatedPlayers,
+    players: data.slice(start, start + limit),
     pagination: {
-      total: playersData.length,
+      total: data.length,
       page,
       limit,
-      totalPages: Math.ceil(playersData.length / limit)
+      totalPages: Math.ceil(data.length / limit)
     }
   };
-};
+}
 
 /**
- * Récupérer un joueur spécifique avec ses statistiques
- * @param {number} playerId - ID du joueur
- * @returns {Promise<object>} - Joueur avec statistiques (inclut lastGames)
+ * Récupère un joueur par ID (version complète avec lastGames)
  */
-export const getPlayerWithStats = async (playerId) => {
-  await new Promise(resolve => setTimeout(resolve, 100));
-
-  const player = players.find(p => p.id === parseInt(playerId));
-
-  if (!player) {
-    throw new Error('Joueur non trouvé');
-  }
-
+export async function getPlayerWithStats(playerId) {
+  await wait();
+  
+  const allPlayers = getPlayersWithUrls();
+  const player = allPlayers.find(p => p.id === parseInt(playerId));
+  if (!player) throw new Error('Joueur non trouvé');
+  
   return player;
-};
+}
 
 /**
- * Récupérer un joueur spécifique (sans statistiques détaillées)
- * @param {number} playerId - ID du joueur
- * @returns {Promise<object>} - Joueur
+ * Récupère un joueur par ID (version allégée sans lastGames)
  */
-export const getPlayer = async (playerId) => {
-  await new Promise(resolve => setTimeout(resolve, 100));
+export async function getPlayer(playerId) {
+  await wait();
+  
+  const allPlayers = getPlayersWithUrls();
+  const player = allPlayers.find(p => p.id === parseInt(playerId));
+  if (!player) throw new Error('Joueur non trouvé');
+  
+  // eslint-disable-next-line no-unused-vars
+  const { lastGames, ...rest } = player;
+  return rest;
+}
 
-  const player = players.find(p => p.id === parseInt(playerId));
-
-  if (!player) {
-    throw new Error('Joueur non trouvé');
-  }
-
-  // Retourner sans les lastGames pour une version allégée
-  const { lastGames, ...playerWithoutGames } = player;
-  return playerWithoutGames;
-};
+// Alias pour compatibilité
+export const getPlayerById = getPlayer;
 
 /**
- * ========================================
- * EXPORT PAR DÉFAUT
- * ========================================
+ * Récupère les joueurs d'une équipe
  */
+export async function getPlayersByTeam(teamId) {
+  await wait();
+  
+  const team = teams.find(t => t.id === parseInt(teamId));
+  if (!team) return [];
+  
+  return getPlayersWithUrls().filter(p => p.team_name === team.name);
+}
+
+/**
+ * Recherche de joueurs par nom
+ */
+export async function searchPlayers(query) {
+  await wait();
+  
+  if (!query) return [];
+  const q = query.toLowerCase();
+  
+  return getPlayersWithUrls().filter(p => 
+    p.name.toLowerCase().includes(q) ||
+    (p.display_name && p.display_name.toLowerCase().includes(q))
+  );
+}
+
+/**
+ * Recherche d'équipes par nom
+ */
+export async function searchTeams(query) {
+  await wait();
+  
+  if (!query) return [];
+  const q = query.toLowerCase();
+  
+  return teams.filter(t => t.name.toLowerCase().includes(q));
+}
+
+// ─────────────────────────────────────────────────────────────
+// UTILITAIRES
+// ─────────────────────────────────────────────────────────────
+
+const ABBREVIATIONS = {
+  "Boston Celtics": "BOS", "Brooklyn Nets": "BKN", "New York Knicks": "NYK",
+  "Philadelphia 76ers": "PHI", "Toronto Raptors": "TOR", "Chicago Bulls": "CHI",
+  "Cleveland Cavaliers": "CLE", "Detroit Pistons": "DET", "Indiana Pacers": "IND",
+  "Milwaukee Bucks": "MIL", "Atlanta Hawks": "ATL", "Charlotte Hornets": "CHA",
+  "Miami Heat": "MIA", "Orlando Magic": "ORL", "Washington Wizards": "WAS",
+  "Denver Nuggets": "DEN", "Minnesota Timberwolves": "MIN", "Oklahoma City Thunder": "OKC",
+  "Portland Trail Blazers": "POR", "Utah Jazz": "UTA", "Golden State Warriors": "GSW",
+  "Los Angeles Clippers": "LAC", "Los Angeles Lakers": "LAL", "Phoenix Suns": "PHX",
+  "Sacramento Kings": "SAC", "Dallas Mavericks": "DAL", "Houston Rockets": "HOU",
+  "Memphis Grizzlies": "MEM", "New Orleans Pelicans": "NOP", "San Antonio Spurs": "SAS",
+};
+
+function getAbbreviation(teamName) {
+  return ABBREVIATIONS[teamName] || "NBA";
+}
+
+// ─────────────────────────────────────────────────────────────
+// EXPORT PAR DÉFAUT (pour compatibilité)
+// ─────────────────────────────────────────────────────────────
+
 const nbaApi = {
-  // Teams
   getStandings,
   getTeams,
   getTeam,
+  getTeamById,
   getTeamWithStats,
-
-  // Players
+  getTeamsByDivision,
+  getTeamsByConference,
   getPlayers,
   getPlayer,
+  getPlayerById,
   getPlayerWithStats,
+  getPlayersByTeam,
+  searchPlayers,
+  searchTeams,
 };
 
 export default nbaApi;
+
+// Re-export des données brutes pour accès direct si besoin
+export { teams, players, getTeamsWithStats };

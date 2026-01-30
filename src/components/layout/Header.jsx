@@ -28,17 +28,18 @@ export default function Header() {
         className="fixed top-0 left-0 w-full z-50 flex justify-between items-center p-4 bg-gray-900 text-white shadow-lg"
       >
         {/* Titre/logo de la navbar */}
-        <Link to="/" className="text-xl font-bold hover:text-yellow-400 transition">
+        <Link to="/" className="text-2xl font-bold hover:text-yellow-400 transition">
           🏀 NBA Dashboard
         </Link>
         
         {/* Liens de navigation - Desktop */}
         <div className="hidden md:flex items-center space-x-6">
-          <Link to="/stats" className="hover:text-yellow-400 transition">Stats</Link>
-          <Link to="/standings" className="hover:text-yellow-400 transition">Standings</Link>
-          <Link to="/teams" className="hover:text-yellow-400 transition">Teams</Link>
-          <Link to="/player" className="hover:text-yellow-400 transition">Players</Link>
-          <Link to="/comparison" className="hover:text-yellow-400 transition">Comparison</Link>
+          <Link to="/stats" className="text-xl hover:text-yellow-400  transition">Stats</Link>
+          <Link to="/standings" className="text-xl hover:text-yellow-400  transition">Standings</Link>
+          <Link to="/teams" className="text-xl hover:text-yellow-400  transition">Teams</Link>
+          <Link to="/player" className="text-xl hover:text-yellow-400  transition">Players</Link>
+          <Link to="/comparison" className="text-xl hover:text-yellow-400  transition">Comparison</Link>
+          <Link to="/quiz" className="text-xl hover:text-yellow-400  transition">Quiz</Link>
         </div>
 
         {/* Bouton hamburger - Mobile */}
@@ -99,38 +100,45 @@ export default function Header() {
               <div className="flex flex-col p-4 space-y-4">
                 <Link 
                   to="/stats" 
-                  className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
+                  className="text-xl hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
                   Stats
                 </Link>
                 <Link 
                   to="/standings" 
-                  className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
+                  className="text-xl hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
                   Standings
                 </Link>
                 <Link 
                   to="/teams" 
-                  className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
+                  className="text-xl hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
                   Teams
                 </Link>
                 <Link 
                   to="/player" 
-                  className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
+                  className="text-xl hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
                   Players
                 </Link>
                 <Link 
                   to="/comparison" 
-                  className="text-lg hover:text-yellow-400 transition py-2 border-b border-gray-700"
+                  className="text-xl hover:text-yellow-400 transition py-2 border-b border-gray-700"
                   onClick={closeMenu}
                 >
                   Comparison
+                </Link>
+                <Link 
+                  to="/quiz" 
+                  className="text-xl hover:text-yellow-400 transition py-2 border-b border-gray-700"
+                  onClick={closeMenu}
+                >
+                  Quiz
                 </Link>
               </div>
             </motion.div>

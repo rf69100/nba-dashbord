@@ -7,6 +7,7 @@ import PlayerProfileCard from "../components/playerProfile/PlayerProfileCard";
 import PlayerStatsCard from "../components/playerProfile/PlayerStatsCard";
 import PlayerShootingStats from "../components/playerProfile/PlayerShootingStats";
 import PlayerRecentGames from "../components/playerProfile/PlayerRecentGames";
+import PlayerSeasonTotals from "../components/playerProfile/PlayerSeasonTotals";
 
 /**
  * Page de profil détaillé d'un joueur NBA
@@ -41,6 +42,10 @@ export default function PlayerProfile() {
           <PlayerShootingStats player={player} />
         </div>
 
+        {/* Stats de saison totales */}
+        <PlayerSeasonTotals player={player} />
+
+        {/* Derniers matchs */}
         <PlayerRecentGames player={player} />
 
         {/* Bouton retour */}
