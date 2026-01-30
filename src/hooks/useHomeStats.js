@@ -22,6 +22,7 @@ export default function useHomeStats() {
           teams: teamsData.teams?.length || 0,
         });
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error('Erreur lors du chargement des stats:', err);
         setError(err.message || 'Erreur lors du chargement');
       } finally {

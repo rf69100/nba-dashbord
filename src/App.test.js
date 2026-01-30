@@ -2,9 +2,10 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-// Ce test vérifie que le texte "learn react" est présent dans le DOM après le rendu
+// eslint-disable-next-line no-undef
 test('renders learn react link', () => {
   render(<App />);
   const linkElement = screen.getByText(/learn react/i);
+  // eslint-disable-next-line no-undef
   expect(linkElement).toBeInTheDocument();
 });

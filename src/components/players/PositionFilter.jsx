@@ -6,10 +6,10 @@ const POSITIONS = ['Center', 'Forward', 'Guard'];
 export default function PositionFilter({ selectedPosition, onSelectPosition }) {
   return (
     <div className="mb-6">
-      <label className="block text-xs font-semibold text-gray-700 mb-2">
+      <label htmlFor="position-filter" className="block text-xs font-semibold text-gray-700 mb-2">
         Filtrer par poste
       </label>
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap" id="position-filter">
         <button
           onClick={() => onSelectPosition('')}
           className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${

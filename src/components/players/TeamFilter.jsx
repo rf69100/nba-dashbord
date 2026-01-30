@@ -10,10 +10,10 @@ export default function TeamFilter({
 }) {
   return (
     <div className="mb-6 relative">
-      <label className="block text-xs font-semibold text-gray-700 mb-2">
+      <label htmlFor="team-filter" className="block text-xs font-semibold text-gray-700 mb-2">
         Filtrer par équipe
       </label>
-      <div className="relative">
+      <div className="relative" id="team-filter">
         <button
           onClick={onToggle}
           className="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-400 bg-white text-left flex justify-between items-center"
@@ -32,6 +32,14 @@ export default function TeamFilter({
                 onSelectTeam('');
                 onToggle();
               }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  onSelectTeam('');
+                  onToggle();
+                }
+              }}
             >
               Toutes les équipes
             </div>
@@ -42,6 +50,14 @@ export default function TeamFilter({
                 onClick={() => {
                   onSelectTeam(team);
                   onToggle();
+                }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    onSelectTeam(team);
+                    onToggle();
+                  }
                 }}
               >
                 {team}
