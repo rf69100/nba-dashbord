@@ -54,11 +54,13 @@ export default function TeamsSelectionList({ teams, selectedTeams, onToggleTeam 
             whileHover={canSelect || isSelected(team.id) ? { scale: 1.05 } : {}}
             whileTap={canSelect || isSelected(team.id) ? { scale: 0.95 } : {}}
           >
-            <TeamLogo
-              teamId={team.id}
-              teamName={team.name}
-              className="w-12 h-12 mx-auto mb-2 object-contain"
-            />
+            <div className="w-12 h-12 mx-auto mb-2">
+              <TeamLogo
+                teamId={team.id}
+                teamName={team.name}
+                className="w-full h-full object-contain"
+              />
+            </div>
             <div className={`text-xs font-bold text-center truncate ${
               isSelected(team.id) ? 'text-black' : 'text-gray-900'
             }`}>

@@ -24,6 +24,7 @@ from typing import Optional, Tuple, List, Dict
 SCRIPT_DIR = Path(__file__).parent
 STATS_FILE = SCRIPT_DIR / "players_stats.txt"
 PLAYER_IDS_FILE = SCRIPT_DIR / "player_nba_ids.json"
+PLAYER_PROFILES_FILE = SCRIPT_DIR / "player_profiles.json"
 
 # Équipes NBA valides
 VALID_TEAMS = {
@@ -106,6 +107,83 @@ def validate_age(age: str) -> Tuple[bool, int]:
         return True, age_int
     except ValueError:
         return False, "L'âge doit être un nombre entier"
+
+
+def validate_height(height: str) -> Tuple[bool, int]:
+    """Valide la taille en cm (optionnel)"""
+    height = height.strip()
+    if not height:
+        return True, 0  # 0 = non renseigné
+    try:
+        height_int = int(height)
+        if height_int < 150 or height_int > 250:
+            return False, "La taille doit être entre 150 et 250 cm"
+        return True, height_int
+    except ValueError:
+        return False, "La taille doit être un nombre entier (en cm)"
+
+
+def validate_weight(weight: str) -> Tuple[bool, int]:
+    """Valide le poids en kg (optionnel)"""
+    weight = weight.strip()
+    if not weight:
+        return True, 0  # 0 = non renseigné
+    try:
+        weight_int = int(weight)
+        if weight_int < 60 or weight_int > 200:
+            return False, "Le poids doit être entre 60 et 200 kg"
+        return True, weight_int
+    except ValueError:
+        return False, "Le poids doit être un nombre entier (en kg)"
+
+
+def validate_nationality(nat: str) -> Tuple[bool, str]:
+    """Valide la nationalité (optionnel)"""
+    nat = nat.strip()
+    if not nat:
+        return True, ""  # Vide = USA par défaut
+    if len(nat) > 50:
+        return False, "Nationalité trop longue (max 50 caractères)"
+    return True, nat
+
+
+def validate_birth_date(date: str) -> Tuple[bool, str]:
+    """Valide la date de naissance au format YYYY-MM-DD (optionnel)"""
+    date = date.strip()
+    if not date:
+        return True, ""  # Vide = non renseigné
+    import re
+    if not re.match(r'^\d{4}-\d{2}-\d{2}$', date):
+        return False, "Format de date invalide. Utilisez YYYY-MM-DD (ex: 1998-07-19)"
+    return True, date
+
+
+def validate_draft_year(year: str) -> Tuple[bool, int]:
+    """Valide l'année de draft (optionnel)"""
+    year = year.strip()
+    if not year:
+        return True, 0  # 0 = non renseigné
+    try:
+        year_int = int(year)
+        if year_int < 1946 or year_int > 2025:
+            return False, "L'année de draft doit être entre 1946 et 2025"
+        return True, year_int
+    except ValueError:
+        return False, "L'année de draft doit être un nombre entier"
+
+
+def validate_draft_pick(pick: str) -> Tuple[bool, int]:
+    """Valide le numéro de draft (optionnel)"""
+    pick = pick.strip()
+    if not pick:
+        return True, 0  # 0 = non renseigné
+    try:
+        pick_int = int(pick)
+        if pick_int < 1 or pick_int > 60:
+            return False, "Le pick doit être entre 1 et 60"
+        return True, pick_int
+    except ValueError:
+        return False, "Le pick doit être un nombre entier"
 
 
 def validate_int(value: str, field_name: str, min_val: int = 0, max_val: int = 10000) -> Tuple[bool, int]:
@@ -238,6 +316,17 @@ def collect_player_data() -> dict:
     team = prompt(f"Équipe (ex: LAL, BOS, MIA)", validate_team)
     position = prompt("Position (PG/SG/SF/PF/C)", validate_position)
     
+    # Informations de profil (optionnelles)
+    print("\n👤 INFORMATIONS PROFIL (laisser vide si inconnu)")
+    print("-" * 40)
+    
+    height_cm = prompt("Taille en cm (ex: 196)", validate_height)
+    weight_kg = prompt("Poids en kg (ex: 88)", validate_weight)
+    nationality = prompt("Nationalité (ex: Canada, France...)", validate_nationality)
+    birth_date = prompt("Date de naissance (YYYY-MM-DD)", validate_birth_date)
+    draft_year = prompt("Année de draft (ex: 2018)", validate_draft_year)
+    draft_pick = prompt("Numéro de pick (ex: 11)", validate_draft_pick)
+    
     # Stats générales
     print("\n📊 STATISTIQUES GÉNÉRALES")
     print("-" * 40)
@@ -325,6 +414,14 @@ def collect_player_data() -> dict:
         "age": age,
         "team": team,
         "position": position,
+        # Infos profil
+        "height_cm": height_cm,
+        "weight_kg": weight_kg,
+        "nationality": nationality,
+        "birth_date": birth_date,
+        "draft_year": draft_year,
+        "draft_pick": draft_pick,
+        # Stats
         "g": g,
         "gs": gs,
         "mp": mp,
@@ -417,8 +514,26 @@ def save_player_ids(player_ids: Dict[str, int]) -> None:
         json.dump(sorted_ids, f, indent=2, ensure_ascii=False)
 
 
+def load_player_profiles() -> Dict[str, Dict]:
+    """Charge les profils de joueurs depuis le fichier JSON"""
+    if PLAYER_PROFILES_FILE.exists():
+        try:
+            with open(PLAYER_PROFILES_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            return {}
+    return {}
+
+
+def save_player_profiles(profiles: Dict[str, Dict]) -> None:
+    """Sauvegarde les profils dans le fichier JSON (trié alphabétiquement)"""
+    sorted_profiles = dict(sorted(profiles.items(), key=lambda x: x[0]))
+    with open(PLAYER_PROFILES_FILE, 'w', encoding='utf-8') as f:
+        json.dump(sorted_profiles, f, indent=2, ensure_ascii=False)
+
+
 def save_player(data: dict) -> bool:
-    """Sauvegarde le joueur dans players_stats.txt et met à jour player_nba_ids.json"""
+    """Sauvegarde le joueur dans players_stats.txt et met à jour les fichiers JSON"""
     line = format_player_line(data)
     
     try:
@@ -441,6 +556,26 @@ def save_player(data: dict) -> bool:
         player_ids[data['name']] = data['nba_id']
         save_player_ids(player_ids)
         
+        # Mettre à jour player_profiles.json (si des infos profil sont renseignées)
+        profile = {}
+        if data.get('height_cm'):
+            profile['height_cm'] = data['height_cm']
+        if data.get('weight_kg'):
+            profile['weight_kg'] = data['weight_kg']
+        if data.get('nationality'):
+            profile['nationality'] = data['nationality']
+        if data.get('birth_date'):
+            profile['birth_date'] = data['birth_date']
+        if data.get('draft_year'):
+            profile['draft_year'] = data['draft_year']
+        if data.get('draft_pick'):
+            profile['draft_pick'] = data['draft_pick']
+        
+        if profile:
+            profiles = load_player_profiles()
+            profiles[data['name']] = profile
+            save_player_profiles(profiles)
+        
         return True
     except IOError as e:
         print(f"❌ Erreur d'écriture: {e}")
@@ -457,15 +592,37 @@ def display_summary(data: dict):
     print(f"   📍 Position: {data['position']} | Âge: {data['age']}")
     print(f"   🔢 Maillot: #{data['jersey']}")
     
+    # Afficher les infos profil si renseignées
+    profile_parts = []
+    if data.get('height_cm'):
+        profile_parts.append(f"{data['height_cm']} cm")
+    if data.get('weight_kg'):
+        profile_parts.append(f"{data['weight_kg']} kg")
+    if data.get('nationality'):
+        profile_parts.append(data['nationality'])
+    if profile_parts:
+        print(f"   👤 Profil: {' | '.join(profile_parts)}")
+    
+    if data.get('birth_date'):
+        print(f"   📅 Date de naissance: {data['birth_date']}")
+    
+    if data.get('draft_year'):
+        draft_info = f"{data['draft_year']}"
+        if data.get('draft_pick'):
+            draft_info += f" (Pick #{data['draft_pick']})"
+        print(f"   🎯 Draft: {draft_info}")
+    
     print(f"\n   📊 Stats saison:")
     print(f"      Matchs: {data['g']} G / {data['gs']} GS")
-    print(f"      Points: {data['pts']} PTS ({data['pts']/data['g']:.1f} PPG)" if data['g'] > 0 else "")
+    if data['g'] > 0:
+        print(f"      Points: {data['pts']} PTS ({data['pts']/data['g']:.1f} PPG)")
     print(f"      Tirs: {data['fg']}/{data['fga']} ({data['fg_pct']:.1%})")
     print(f"      3-pts: {data['p3']}/{data['p3a']} ({data['p3_pct']:.1%})")
     print(f"      LF: {data['ft']}/{data['fta']} ({data['ft_pct']:.1%})")
     print(f"      Rebonds: {data['trb']} ({data['orb']} OFF + {data['drb']} DEF)")
     print(f"      Passes: {data['ast']} AST")
     print(f"      Défense: {data['stl']} STL / {data['blk']} BLK")
+    print(f"      Autres: {data['tov']} TOV / {data['pf']} PF")
     
     if data['awards']:
         print(f"\n   🏆 Distinctions: {data['awards']}")
@@ -508,6 +665,10 @@ def main():
                 print(f"\n✅ {player_data['name']} ajouté avec succès!")
                 print(f"   📄 Stats: {STATS_FILE}")
                 print(f"   📄 IDs: {PLAYER_IDS_FILE}")
+                if any([player_data.get('height_cm'), player_data.get('weight_kg'), 
+                        player_data.get('nationality'), player_data.get('birth_date'),
+                        player_data.get('draft_year'), player_data.get('draft_pick')]):
+                    print(f"   📄 Profils: {PLAYER_PROFILES_FILE}")
                 print(f"\n💡 Exécutez maintenant: python3 generate_players.py")
                 print("   pour synchroniser avec nbaData.js")
             else:

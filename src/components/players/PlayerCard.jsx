@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import PlayerAvatar from "../common/PlayerAvatar";
 
 /**
  * Carte d'affichage des informations et statistiques moyennes d'un joueur NBA.
@@ -57,14 +58,12 @@ export default function PlayerCard({ player }) {
       animate={{ opacity: 1, y: 0 }}
     >
       {/* Photo du joueur */}
-      <img
-        src={player.info.photo}
-        alt={player.name}
-        className="w-32 h-32 object-cover rounded-full border-4 border-white shadow-md mb-4"
-        onError={(e) => {
-          const name = player.name.replace(' ', '+');
-          e.target.src = `https://ui-avatars.com/api/?name=${name}&size=256&background=random&color=fff&bold=true`;
-        }}
+      <PlayerAvatar
+        photoUrl={player.info.photo}
+        playerName={player.name}
+        size="xl"
+        borderColor="border-white"
+        className="mb-4"
       />
 
       {/* Nom & équipe */}

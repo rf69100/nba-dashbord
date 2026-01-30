@@ -8,6 +8,7 @@ import PageContainer from "../components/layout/PageContainer";
 import PageLoader from "../components/layout/PageLoader";
 import ErrorMessage from "../components/layout/ErrorMessage";
 import PageTitle from "../components/layout/PageTitle";
+import StatsInfoBox from "../components/stats/StatsInfoBox";
 
 /**
  * Page des statistiques NBA - Leaders de la ligue
@@ -99,6 +100,12 @@ export default function Stats() {
           currentCategory={currentCategory}
           statKey={selectedCategory}
         />
+
+        <StatsInfoBox
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+          />
       </motion.div>
     </PageContainer>
   );

@@ -19,3 +19,25 @@ body {
   width: 100%;
   overflow-x: hidden;
 }
+
+/* Optimisation du rendu des images pour éviter la pixelisation */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Classes utilitaires pour les images haute résolution */
+.player-avatar {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Amélioration du rendu des images circulaires */
+.rounded-full img,
+img.rounded-full {
+  image-rendering: -webkit-optimize-contrast;
+}

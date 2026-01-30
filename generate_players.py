@@ -33,6 +33,7 @@ SCRIPT_DIR = Path(__file__).parent
 STATS_FILE = SCRIPT_DIR / "players_stats.txt"
 NBA_DATA_FILE = SCRIPT_DIR / "src" / "services" / "nbaData.js"
 PLAYER_IDS_FILE = SCRIPT_DIR / "player_nba_ids.json"
+PLAYER_PROFILES_FILE = SCRIPT_DIR / "player_profiles.json"
 
 # Mapping équipe abréviation -> nom de fichier logo
 TEAM_LOGOS: Dict[str, str] = {
@@ -246,6 +247,17 @@ def load_player_ids() -> Dict[str, int]:
         "Domantas Sabonis": 1627734,
         "Victor Wembanyama": 1641705,
     }
+
+
+def load_player_profiles() -> Dict[str, Dict]:
+    """Charge les profils de joueurs depuis player_profiles.json"""
+    if PLAYER_PROFILES_FILE.exists():
+        try:
+            with open(PLAYER_PROFILES_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            print(f"⚠️  Erreur lecture {PLAYER_PROFILES_FILE.name}")
+    return {}
 
 
 def save_player_ids(player_ids: Dict[str, int]) -> None:
@@ -549,13 +561,17 @@ def generate_game_stats(stats: PlayerStats) -> Dict:
     }
 
 
-def player_to_js_object(player: Player, player_id: int, player_ids: Dict[str, int]) -> Dict:
+def player_to_js_object(player: Player, player_id: int, player_ids: Dict[str, int], player_profiles: Dict[str, Dict]) -> Dict:
     """Convertit un Player en objet JavaScript pour nbaData.js"""
     
     stats = player.stats
     last_games = [generate_game_stats(stats) for _ in range(10)]
     
-    return {
+    # Récupérer le profil du joueur s'il existe
+    profile = player_profiles.get(player.name, {})
+    
+    # Construire l'objet de base
+    player_obj = {
         "id": player_id,
         "name": player.name,
         "display_name": player.name,
@@ -564,11 +580,11 @@ def player_to_js_object(player: Player, player_id: int, player_ids: Dict[str, in
         "team_abbreviation": player.team_abbr,
         "team_logo_url": player.team_logo_url,
         "jersey_number": player.jersey,
-        "nationality": "USA",
-        "birth_date": "1990-01-01",
+        "nationality": profile.get("nationality", "USA"),
+        "birth_date": profile.get("birth_date", ""),
         "age": player.age,
-        "height_cm": 195,
-        "weight_kg": 95,
+        "height_cm": profile.get("height_cm", 0),
+        "weight_kg": profile.get("weight_kg", 0),
         "position": player.position_full,
         "photo_url": player.photo_url(player_ids),
         "season_stats": {
@@ -590,11 +606,21 @@ def player_to_js_object(player: Player, player_id: int, player_ids: Dict[str, in
             "AST": stats.AST,
             "STL": stats.STL,
             "BLK": stats.BLK,
+            "TOV": stats.TOV,
+            "PF": stats.PF,
             "PTS": stats.PTS,
         },
         "lastGames": last_games,
         "awards": player.awards,
     }
+    
+    # Ajouter draft_year et draft_pick si disponibles dans le profil
+    if profile.get("draft_year"):
+        player_obj["draft_year"] = profile["draft_year"]
+    if profile.get("draft_pick"):
+        player_obj["draft_pick"] = profile["draft_pick"]
+    
+    return player_obj
 
 
 # =============================================================================
@@ -667,6 +693,11 @@ def cmd_rebuild(player_ids: Dict[str, int]) -> None:
     else:
         print(f"   → Déjà synchronisé")
     
+    # Charger les profils de joueurs
+    player_profiles = load_player_profiles()
+    if player_profiles:
+        print(f"\n👤 {len(player_profiles)} profils chargés depuis {PLAYER_PROFILES_FILE.name}")
+    
     # Parser le fichier
     print(f"\n📊 Parsing de {STATS_FILE.name}...")
     players = parse_stats_file(STATS_FILE)
@@ -676,7 +707,7 @@ def cmd_rebuild(player_ids: Dict[str, int]) -> None:
     print(f"\n⚙️  Génération des données...")
     players_js = []
     for idx, player in enumerate(players, 1):
-        player_js = player_to_js_object(player, idx, player_ids)
+        player_js = player_to_js_object(player, idx, player_ids, player_profiles)
         players_js.append(player_js)
     
     # Trier par PTS décroissant
@@ -734,13 +765,18 @@ def cmd_incremental(player_ids: Dict[str, int]) -> None:
         print("\n✅ Tous les joueurs sont déjà présents!")
         return
     
+    # Charger les profils de joueurs
+    player_profiles = load_player_profiles()
+    if player_profiles:
+        print(f"\n👤 {len(player_profiles)} profils chargés")
+    
     # Générer les objets JS
     print(f"\n⚙️  Génération des données...")
     next_id = max((p.get('id', 0) for p in existing_players), default=0) + 1
     
     new_players_js = []
     for player in players_to_add:
-        player_js = player_to_js_object(player, next_id, player_ids)
+        player_js = player_to_js_object(player, next_id, player_ids, player_profiles)
         new_players_js.append(player_js)
         next_id += 1
     

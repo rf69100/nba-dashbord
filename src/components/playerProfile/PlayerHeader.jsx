@@ -22,15 +22,23 @@ export default function PlayerHeader({ player, teamId }) {
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
           {/* Photo du joueur */}
           <div className="relative">
-            <img
-              src={player.photo_url || player.info?.photo}
-              alt={player.display_name}
-              className="w-64 h-64 object-cover rounded-lg border-4 border-white shadow-2xl"
-              onError={(e) => {
-                const name = (player.display_name || player.name).replace(' ', '+');
-                e.target.src = `https://ui-avatars.com/api/?name=${name}&size=256&background=3B82F6&color=fff&bold=true`;
-              }}
-            />
+            <div className="w-64 h-64 overflow-hidden rounded-lg border-4 border-white shadow-2xl">
+              <img
+                src={player.photo_url || player.info?.photo}
+                alt={player.display_name}
+                className="w-full h-full object-cover"
+                style={{ 
+                  imageRendering: 'auto',
+                  WebkitBackfaceVisibility: 'hidden',
+                  backfaceVisibility: 'hidden'
+                }}
+                loading="lazy"
+                onError={(e) => {
+                  const name = (player.display_name || player.name).replace(' ', '+');
+                  e.target.src = `https://ui-avatars.com/api/?name=${name}&size=512&background=3B82F6&color=fff&bold=true`;
+                }}
+              />
+            </div>
             {player.team_logo_url && teamId && (
               <Link to={`/team/${teamId}`} className="absolute -bottom-4 -right-4">
                 <img
