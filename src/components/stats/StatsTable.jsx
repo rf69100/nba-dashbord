@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import StatsTableRow from "./StatsTableRow";
+import PlayerAvatar from "../common/PlayerAvatar";
 
 /**
  * Composant pour le tableau complet des statistiques
@@ -37,19 +38,16 @@ export default function StatsTable({ players, currentCategory, statKey }) {
               transition={{ delay: 0.5 + index * 0.02 }}
             >
               <div className="flex items-center gap-3">
-                <div className="flex-shrink-0 text-center w-8">
+                <div className="flex-shrink-0 w-8 flex items-center justify-center">
                   <span className="text-lg font-bold">
                     {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : index + 1}
                   </span>
                 </div>
-                <img
-                  src={player.photo}
-                  alt={player.name}
-                  className="w-10 h-10 rounded-full object-cover border-2 border-blue-300 flex-shrink-0"
-                  onError={(e) => {
-                    const name = player.name.replace(" ", "+");
-                    e.target.src = `https://ui-avatars.com/api/?name=${name}&size=40&background=3b82f6&color=fff&bold=true`;
-                  }}
+                <PlayerAvatar
+                  photoUrl={player.photo}
+                  playerName={player.name}
+                  size="sm"
+                  borderColor="border-blue-300"
                 />
                 <div className="flex-grow min-w-0">
                   <div className="font-bold text-gray-900 text-sm truncate">{player.name}</div>
@@ -59,8 +57,8 @@ export default function StatsTable({ players, currentCategory, statKey }) {
                     <span>{player.position}</span>
                   </div>
                 </div>
-                <div className="text-right flex-shrink-0 flex items-center gap-2">
-                  <div>
+                <div className="flex-shrink-0 flex items-center gap-2">
+                  <div className="text-right">
                     <div className="text-lg font-bold text-blue-600">{player.stats[statKey]}</div>
                     <div className="text-xs text-gray-500">{currentCategory.abbr}</div>
                   </div>
@@ -91,7 +89,6 @@ export default function StatsTable({ players, currentCategory, statKey }) {
               <th className="px-3 sm:px-4 py-3 text-center text-blue-600 font-bold">
                 {currentCategory.abbr}
               </th>
-              <th className="px-3 sm:px-4 py-3 text-center hidden lg:table-cell">ACTIONS</th>
             </tr>
           </thead>
           <tbody>
